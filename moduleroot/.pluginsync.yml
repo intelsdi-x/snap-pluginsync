@@ -1,0 +1,17 @@
+<%-
+require "find"
+require "pathname"
+
+def pad_yaml(hash, num_spaces=0)
+  value = hash.to_yaml.split("\n")
+  value[1..-1].collect{|line| ' ' * num_spaces + line}.join("\n")
+end
+
+# obtain list of files in moduleroot and strip source path prefix
+path = File.expand_path(Pathname.new(__FILE__).parent)
+managed_files = Find.find("#{path}/moduleroot/")
+managed_files = managed_files.collect{|line| line.sub("#{path}/moduleroot/",'')}
+-%>
+pluginsync_config: '0.1.0'
+managed_files:
+<%= pad_yaml(managed_files) %>
