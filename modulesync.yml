@@ -1,0 +1,5 @@
+---
+git_base: 'git@github.com:'
+namespace: intelsdi-x
+branch: pluginsync
+message: "Update from Intelsdi-X pluginsync"

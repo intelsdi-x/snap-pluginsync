@@ -1,0 +1,97 @@
+# File managed by pluginsync
+<%-
+require "hashie"
+settings = Hashie::Mash.new(@configs)
+
+def pad_yaml(hash, num_spaces=0)
+  value = hash.to_yaml.split("\n")
+  value[1..-1].collect{|line| ' ' * num_spaces + line}.join("\n")
+end
+-%>
+sudo: false
+language: go
+<%- if settings.addons? -%>
+<%= pad_yaml(settings.addons) %>
+<%- end -%>
+go:
+<%= pad_yaml(settings.go) %>
+<%- if settings.addons? -%>
+<%= pad_yaml(settings.addons) %>
+<%- end -%>
+<%- if settings.env? -%>
+env:
+<%- if settings.env.global? -%>
+  global:
+<%= pad_yaml(settings.env.global, 2) %>
+<%- end -%>
+  matrix:
+<%- if settings.env.matrix? -%>
+<%= pad_yaml(settings.env.matrix, 2) %>
+<%- end -%>
+  - TEST_TYPE=build
+<%- end -%>
+matrix:
+  exclude:
+  - go: <%= settings.go.first %>
+    env: TEST_TYPE=build
+before_install:
+- "[[ -d $SNAP_PLUGIN_SOURCE ]] || mkdir -p $ORG_PATH && ln -s $TRAVIS_BUILD_DIR $SNAP_PLUGIN_SOURCE"
+install:
+- cd $SNAP_PLUGIN_SOURCE
+- make deps
+script:
+- make check 2>&1
+notifications:
+  email: false
+  slack:
+    secure: VkbZLIc2RH8yf3PtIAxUNPdAu3rQQ7yQx0GcK124JhbEnZGaHyK615V0rbG7HcVmYKGPdB0cXqZiLBDKGqGKb2zR1NepOe1nF03jxGSpPq8jIFeEXSJGEYGL34ScDzZZGuG6qwbjFcXiW5lqn6t8igzp7v2+URYBaZo5ktCS2xY=
+<%- if settings.deploy? -%>
+before_deploy:
+- "./scripts/pre_deploy.sh"
+deploy:
+<%- if settings.deploy.access_key_id? && settings.deploy.secret_access_key -%>
+- provider: s3
+  access_key_id: <%= settings.deploy.access_key_id %>
+  secret_access_key:
+    secure: <%= settings.deploy.secret_access_key.secure %>
+  bucket: snap.ci.snap-telemetry.io
+  region: us-west-2
+  skip_cleanup: true
+  local-dir: s3
+  upload-dir: plugins/
+  acl: public_read
+  on:
+    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    branch: master
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+- provider: s3
+  access_key_id: <%= settings.deploy.access_key_id %>
+  secret_access_key:
+    secure: <%= settings.deploy.secret_access_key.secure %>
+  bucket: snap.ci.snap-telemetry.io
+  region: us-west-2
+  skip_cleanup: true
+  local-dir: s3
+  upload-dir: plugins/
+  acl: public_read
+  on:
+    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    tags: true
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+<%- end -%>
+<%- if settings.deploy.api_key? && settings.build? && settings.build.matrix? -%>
+- provider: releases
+  api_key:
+    secure: <%= settings.deploy.api_key.secure %>
+  file:
+<%- settings.build.matrix.each do |release| 
+      release['GOARCH'] = 'x86_64' if release['GOARCH'] == 'amd64'-%>
+    - release/${TRAVIS_REPO_SLUG}_<%= release['GOOS'] %>_<%= release['GOARCH'] %>
+<%- end -%>
+  skip_cleanup: true
+  on:
+    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    tags: true
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+<%- end -%>
+<%- end -%>
