@@ -36,3 +36,9 @@ profile.cov
 # we don't vendor godep _workspace
 **/Godeps/_workspace/**
 vendor/
+
+# Misc
+.idea
+build/
+*.swp
+gin-bin
