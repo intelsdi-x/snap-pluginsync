@@ -10,8 +10,8 @@ end
 # obtain list of files in moduleroot and strip source path prefix
 path = File.expand_path(Pathname.new(__FILE__).parent)
 managed_files = Find.find("#{path}/moduleroot/")
-managed_files = managed_files.collect{|line| line.sub("#{path}/moduleroot/",'')}
+managed_files = managed_files.collect{|line| line.sub("#{path}/moduleroot/",'')}.reject{|path| path==""}
 -%>
-pluginsync_config: '0.1.0'
+pluginsync_config: '0.1.1'
 managed_files:
 <%= pad_yaml(managed_files) %>

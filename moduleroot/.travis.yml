@@ -58,7 +58,7 @@ deploy:
   region: us-west-2
   skip_cleanup: true
   local-dir: s3
-  upload-dir: plugins/
+  upload-dir: plugins
   acl: public_read
   on:
     repo: intelsdi-x/${TRAVIS_REPO_SLUG}
@@ -72,7 +72,7 @@ deploy:
   region: us-west-2
   skip_cleanup: true
   local-dir: s3
-  upload-dir: plugins/
+  upload-dir: plugins
   acl: public_read
   on:
     repo: intelsdi-x/${TRAVIS_REPO_SLUG}

@@ -71,3 +71,9 @@ restore_go_dep() {
 _dep=$(detect_go_dep)
 install_go_dep
 restore_go_dep
+<%- 
+if @configs.include? 'packages'
+  @configs["packages"].each do |pkg| -%>
+_go_get <%=pkg%>
+<%- end
+end -%>
