@@ -2,4 +2,12 @@
 git_base: 'git@github.com:'
 namespace: intelsdi-x
 branch: pluginsync
-message: "Update from Intelsdi-X pluginsync"
+message: "Updates to repository from pluginsync utility
+
+          Pluginsync is designed to keep the following up-to-date across plugins:
+            * .gitignore
+            * .travis.yml
+            * LICENSE
+            * CONTRIBUTING.md
+            * PR & Issue templates
+            * Build files (Makefile, deployment scripts)"
