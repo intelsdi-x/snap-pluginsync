@@ -48,6 +48,16 @@ $ bundle exec msync update -f {plugin_name} --noop
 $ cd modules/{plugin_name}
 ```
 
+Generate travis secrets for .travis.yml (replace $repo_name with github repo name):
+```
+$ bundle exec travis encrypt secret_api_key -r 'intelsdi-x/${repo_name}'
+Please add the following to your .travis.yml file:
+
+  secure: "REE..."
+```
+
+NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info.
+
 ## Pluginsync Configuration
 
 Custom settings are maintained in each repo's .sync.yml file:
