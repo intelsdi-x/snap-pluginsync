@@ -25,9 +25,10 @@ As a basic rule, if you cannot provide enough information to continue addressing
 
 
 **Steps to reproduce it** (as minimally and precisely as possible):
-1.
-2.
-3.
+
+1. 
+2. 
+3. 
 
 
 **Anything else do we need to know** (e.g. issue happens only occasionally):
