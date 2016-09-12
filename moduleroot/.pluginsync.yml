@@ -4,7 +4,7 @@ require "pathname"
 
 def pad_yaml(hash, num_spaces=0)
   value = hash.to_yaml.split("\n")
-  value[1..-1].collect{|line| ' ' * num_spaces + line}.join("\n")
+  value[1..-1].collect{|line| ' ' * num_spaces + line.gsub('"','')}.join("\n")
 end
 
 # obtain list of files in moduleroot and strip source path prefix
