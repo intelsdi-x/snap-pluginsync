@@ -2,6 +2,7 @@
 <%-
 require "hashie"
 settings = Hashie::Mash.new(@configs)
+settings.repo_name = settings.puppet_module
 
 def pad_yaml(hash, num_spaces=0)
   value = hash.to_yaml.split("\n")
@@ -61,7 +62,7 @@ deploy:
   upload-dir: plugins
   acl: public_read
   on:
-    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    repo: intelsdi-x/<%= settings.repo_name %>
     branch: master
     condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
 - provider: s3
@@ -75,7 +76,7 @@ deploy:
   upload-dir: plugins
   acl: public_read
   on:
-    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    repo: intelsdi-x/<%= settings.repo_name %>
     tags: true
     condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
 <%- end -%>
@@ -86,11 +87,11 @@ deploy:
   file:
 <%- settings.build.matrix.each do |release| 
       release['GOARCH'] = 'x86_64' if release['GOARCH'] == 'amd64'-%>
-    - release/${TRAVIS_REPO_SLUG}_<%= release['GOOS'] %>_<%= release['GOARCH'] %>
+    - release/<%= settings.repo_name %>_<%= release['GOOS'] %>_<%= release['GOARCH'] %>
 <%- end -%>
   skip_cleanup: true
   on:
-    repo: intelsdi-x/${TRAVIS_REPO_SLUG}
+    repo: intelsdi-x/<%= settings.repo_name %>
     tags: true
     condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
 <%- end -%>
