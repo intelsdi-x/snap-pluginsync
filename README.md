@@ -151,6 +151,17 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
 
 NOTE: Be aware, custom settings are not merged with defaults, instead they replace the default values.
 
+### contributing.md
+
+The contributing.md suports the following settings:
+* maintainers: core, community (defaults to community).
+
+Since this may affect additional files, it's recommended to specify the setting in global:
+```
+:global:
+  maintainers: core
+```
+
 ## Special Files
 
 ### .pluginsync.yml
