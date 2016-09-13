@@ -4,20 +4,23 @@ require "hashie"
 settings = Hashie::Mash.new(@configs)
 settings.repo_name = settings.puppet_module
 
-def pad_yaml(hash, num_spaces=0)
-  value = hash.to_yaml.split("\n")
+def pad_yaml(data, num_spaces=0)
+  data = data.to_hash if data.is_a? ::Hashie::Mash
+  value = data.to_yaml.split("\n")
   value[1..-1].collect{|line| ' ' * num_spaces + line}.join("\n")
 end
 -%>
+<%- if settings.sudo? -%>
+sudo: <%= settings.sudo %>
+<%- else -%>
 sudo: false
-language: go
-<%- if settings.addons? -%>
-<%= pad_yaml(settings.addons) %>
 <%- end -%>
+language: go
 go:
 <%= pad_yaml(settings.go) %>
 <%- if settings.addons? -%>
-<%= pad_yaml(settings.addons) %>
+addons:
+<%= pad_yaml(settings.addons, 2) %>
 <%- end -%>
 <%- if settings.env? -%>
 env:
