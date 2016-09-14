@@ -160,12 +160,12 @@ NOTE: Be aware, custom settings are not merged with defaults, instead they repla
 ```
 pluginsync_config: '0.1.0'
 managed_files:
-- ".github"
-- ".github/ISSUE_TEMPLATE.md"
-- ".github/PULL_REQUEST_TEMPLATE.md"
-- ".gitignore"
-- ".pluginsync.yml"
-- ".travis.yml"
+- .github
+- .github/ISSUE_TEMPLATE.md
+- .github/PULL_REQUEST_TEMPLATE.md
+- .gitignore
+- .pluginsync.yml
+- .travis.yml
 - CONTRIBUTING.md
 - LICENSE
 - Makefile
