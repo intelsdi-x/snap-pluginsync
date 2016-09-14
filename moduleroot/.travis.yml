@@ -22,6 +22,10 @@ go:
 addons:
 <%= pad_yaml(settings.addons, 2) %>
 <%- end -%>
+<%- if settings.services? -%>
+services:
+<%= pad_yaml(settings.services, 2) %>
+<%- end -%>
 <%- if settings.env? -%>
 env:
 <%- if settings.env.global? -%>
