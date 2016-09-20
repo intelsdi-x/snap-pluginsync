@@ -15,6 +15,9 @@ sudo: <%= settings.sudo %>
 <%- else -%>
 sudo: false
 <%- end -%>
+<%- if settings.dist? -%>
+dist: <%= settings.dist %>
+<%- end -%>
 language: go
 go:
 <%= pad_yaml(settings.go) %>

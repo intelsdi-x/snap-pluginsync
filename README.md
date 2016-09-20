@@ -115,7 +115,19 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
 
 .travis.yml supports the following settings:
 
-* addons: for installing additional software packages
+* sudo: enable/disable [container/VM build environment](https://docs.travis-ci.com/user/ci-environment/#Virtualization-environments)
+```
+.travis.yml:
+  sudo: true
+```
+
+* dist: select travis trusty VM (beta)
+```
+.travis.yml:
+  dist: trusty
+```
+
+* addons: [custom ppa repositories and additional software packages](https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-with-the-APT-Addon)
 ```
 .travis.yml:
   addons:
@@ -124,6 +136,13 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
         - cmake
         - libgeoip-dev
         - protobuf-compiler
+```
+
+* services: enable [docker containers](https://docs.travis-ci.com/user/docker/) and docker hub image push support
+```
+.travis.yml:
+  services:
+    - docker
 ```
 
 * env: global environment values and test matrix, i.e. small/medium/large (NOTE: build is always included)
@@ -150,6 +169,27 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
 ```
 
 NOTE: Be aware, custom settings are not merged with defaults, instead they replace the default values.
+
+### scripts/build.sh
+build.sh supports the following settings:
+
+* cgo_enabled: enable/disable CGO for builds (default: 0)
+```
+scripts/build.sh:
+  cgo_enabled: true
+```
+
+### scripts/deps.sh
+
+deps.sh supports the following settings:
+
+* packages: additional go package dependencies (please limit to test frameworks, software dependencies should be specified in godep or glide.yaml)
+```
+scripts/deps.sh:
+  packages:
+    - github.com/smartystreets/goconvey
+    - github.com/stretchr/testify/mock
+```
 
 ## Special Files
 

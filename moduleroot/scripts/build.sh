@@ -35,8 +35,14 @@ go_build=(go build -ldflags "-w")
 _info "project path: ${__proj_dir}"
 _info "plugin name: ${plugin_name}"
 
-# Disable CGO for builds
-export CGO_ENABLED=0
+<%-
+if @configs['cgo_enabled']
+  cgo = 1
+else
+  cgo = 0
+end
+-%>
+export CGO_ENABLED=<%= cgo %>
 
 # rebuild binaries:
 _debug "removing: ${build_dir:?}/*"
