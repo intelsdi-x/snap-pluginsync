@@ -46,8 +46,14 @@ matrix:
   - go: <%= settings.go.first %>
     env: TEST_TYPE=build
 before_install:
+<%- if settings.before_install? -%>
+<%= pad_yaml(settings.before_install, 0) %>
+<%- end -%>
 - "[[ -d $SNAP_PLUGIN_SOURCE ]] || mkdir -p $ORG_PATH && ln -s $TRAVIS_BUILD_DIR $SNAP_PLUGIN_SOURCE"
 install:
+<%- if settings.install? -%>
+<%= pad_yaml(settings.install, 0) %>
+<%- end -%>
 - cd $SNAP_PLUGIN_SOURCE
 - make deps
 script:

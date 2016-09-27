@@ -145,6 +145,19 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
     - docker
 ```
 
+* before_install: preinstall configs, typically environment varibles
+```
+.travis.yml:
+  before_install:
+    - LOG_LEVEL=7
+```
+
+* install: additional software to install, typically done in VM environment
+```
+.travis.yml:
+  install:
+    - 'sudo apt-get install facter'
+```
 * env: global environment values and test matrix, i.e. small/medium/large (NOTE: build is always included)
 ```
 .travis.yml:
