@@ -12,6 +12,7 @@ path = File.expand_path(Pathname.new(__FILE__).parent)
 managed_files = Find.find("#{path}/moduleroot/")
 managed_files = managed_files.collect{|line| line.sub("#{path}/moduleroot/",'')}.reject{|path| path==""}
 -%>
-pluginsync_config: '0.1.6'
+# File managed by pluginsync
+pluginsync_config: '0.1.7'
 managed_files:
 <%= pad_yaml(managed_files) %>
