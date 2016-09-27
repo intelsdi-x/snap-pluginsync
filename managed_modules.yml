@@ -39,6 +39,7 @@
 - snap-plugin-collector-swap
 - snap-plugin-collector-users
 - snap-plugin-processor-movingaverage
+- snap-plugin-processor-statistics
 - snap-plugin-processor-tag
 - snap-plugin-publisher-file
 - snap-plugin-publisher-graphite

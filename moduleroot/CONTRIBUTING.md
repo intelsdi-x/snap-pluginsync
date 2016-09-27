@@ -21,12 +21,13 @@ Once you're ready to contribute code back to this repo, start with these steps:
 * Clone the fork to `$GOPATH/src/github.com/intelsdi-x/`:
 
     ```
-$ git clone https://github.com/<yourGithubID>/<project>.git
+$ cd "${GOPATH}/src/github.com/intelsdi-x/"
+$ git clone https://github.com/intelsdi-x/<%= repo_name %>.git
     ```
 * Create a topic branch for your change and checkout that branch:
 
     ```
-    $ git checkout -b some-topic-branch
+$ git checkout -b some-topic-branch
     ```
 * Make your changes and run the test suite if one is provided.
 * Commit your changes and push them to your fork.
