@@ -6,7 +6,11 @@
 3. [Contribute Elsewhere](#contribute-elsewhere)
 4. [Thank You](#thank-you)
 
+<%- if @configs['maintainer'] == 'core' -%>
 This repository has dedicated developers from Intel working on updates. The most helpful way to contribute is by reporting your experience through issues. Issues may not be updated while we review internally, but they're still incredibly appreciated.
+<%- elsif @configs['maintainer'] == 'community' -%>
+This repository is primarily **community supported**. We both appreciate and need your contribution to keep it stable. Thank you for being part of the community! We love you for it.
+<%- end -%>
 
 ## Contributing Code
 **_IMPORTANT_**: We encourage contributions to the project from the community. We ask that you keep the following guidelines in mind when planning your contribution.
@@ -33,7 +37,7 @@ $ git clone https://github.com/<yourGithubID>/<project>.git
 * Open a pull request for the appropriate project.
 * Contributors will review your pull request, suggest changes, and merge it when it’s ready and/or offer feedback.
 
-If you have questions feel free to contact the [maintainers](https://github.com/intelsdi-x/snap/blob/master/README.md#maintainers) by tagging them: @intelsdi-x/plugin-maintainers.
+If you have questions feel free to contact the [maintainers](https://github.com/intelsdi-x/snap/blob/master/README.md#maintainers).
 
 ## Contributing Examples
 The most immediately helpful way you can benefit this project is by cloning the repository, adding some further examples and submitting a pull request.
