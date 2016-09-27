@@ -3,3 +3,6 @@ git_base: 'git@github.com:'
 namespace: intelsdi-x
 branch: pluginsync
 message: "Updates to repository from pluginsync utility"
+plugins.yml:
+  repo: intelsdi-x/snap
+  path: docs/plugins.yml
