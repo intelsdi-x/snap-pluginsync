@@ -191,6 +191,17 @@ scripts/deps.sh:
     - github.com/stretchr/testify/mock
 ```
 
+### contributing.md
+
+The contributing.md suports the following settings:
+* maintainers: core, community, github username.
+
+Since this may affect additional files, it's recommended to specify the setting in global:
+```
+:global:
+  maintainer: core
+```
+
 ## Special Files
 
 ### .pluginsync.yml
