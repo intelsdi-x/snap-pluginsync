@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'json'
-require 'semantic'
 require 'yaml'
 
 module Pluginsync
@@ -66,16 +65,6 @@ module Pluginsync
       end
 
       family ||= "Unknown"
-    end
-
-    ##
-    # return semver from malform git tags (e.g. v0.13.0-beta) so they can be sorted.
-
-    def self.semver version
-      ::Semantic::Version.new version
-    rescue ArgumentError
-      clean_version = version.match(/(\d*\.\d*\.\d*)/)[0]
-      ::Semantic::Version.new clean_version
     end
 
     ##

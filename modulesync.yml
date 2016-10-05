@@ -6,3 +6,6 @@ message: "Updates to repository from pluginsync utility"
 plugins.yml:
   repo: intelsdi-x/snap
   path: docs/plugins.yml
+plugin_catalog.md:
+  repo: intelsdi-x/snap
+  path: docs/PLUGIN_CATALOG.md

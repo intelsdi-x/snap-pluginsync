@@ -35,6 +35,7 @@
 - snap-plugin-collector-psutil
 - snap-plugin-collector-rabbitmq
 - snap-plugin-collector-scaleio
+- snap-plugin-collector-snmp
 - snap-plugin-collector-smart
 - snap-plugin-collector-swap
 - snap-plugin-collector-users

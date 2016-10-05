@@ -4,7 +4,6 @@ gem "hashie"
 gem "modulesync"
 gem "octokit"
 gem "rake"
-gem "semantic"
 gem "slack-ruby-client"
 gem "travis"
 

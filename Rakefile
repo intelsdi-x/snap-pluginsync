@@ -2,7 +2,6 @@
 # unavoidable between FPM and homebrew.
 
 require "rake"
-require "rake/testtask"
 require_relative "lib/pluginsync"
 
 begin
@@ -30,6 +29,11 @@ namespace :plugin do
   desc "generate plugin wishlist"
   task :wishlist do
     puts Pluginsync::Plugins.wishlist
+  end
+
+  desc "generate plugin wishlist"
+  task :pull_request do
+    Pluginsync::Plugins.pull_request
   end
 end
 
