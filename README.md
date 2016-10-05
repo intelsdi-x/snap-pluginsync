@@ -42,11 +42,18 @@ For more info see:
 
 ## Usage
 
+Update all plugins (must use the noop option for now):
+```
+$ bundle exec msync update --noop
+$ cd modules/{plugin_name}
+```
+
 Update one plugin and review changes:
 ```
 $ bundle exec msync update -f {plugin_name} --noop
 $ cd modules/{plugin_name}
 ```
+NOTE: The plugin_name is the full repo name 'snap-plugin-collector-ethtool'.
 
 Generate travis secrets for .travis.yml (replace $repo_name with github repo name):
 ```
@@ -57,6 +64,25 @@ Please add the following to your .travis.yml file:
 ```
 
 NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info.
+
+### New Plugins
+
+To run pluginsync against a new plugin:
+
+* create a new repo on github (check initialize repo with a README)
+* add new plugin repo name to the list of plugins in managed_modules.yml
+* run `msync update` command per usage above
+
+### Private Plugins
+
+Currently, private repos are not listed in managed_modules.yml. To run pluginsync against a private repo, follow the steps in new plugins and ensure you have configured ssh key or token based github access.
+
+See github documentation for more information:
+
+* [Generating and using a ssh key](https://help.github.com/articles/generating-an-ssh-key/)
+* [Generating access token for command line usage](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+
+NOTE: an alternative option is to install and use the [hub cli tool](https://github.com/github/hub) which provides a convenient way to generate and save github access token.
 
 ## Pluginsync Configuration
 
