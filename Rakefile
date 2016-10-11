@@ -31,7 +31,22 @@ namespace :plugin do
     puts Pluginsync::Plugins.wishlist
   end
 
-  desc "generate plugin wishlist"
+  desc "generate plugin json for github.io page"
+  task :github_io do
+    data = Pluginsync::Plugins.metadata
+    result = data.collect do |i|
+      {
+        name: i["name"],
+        type: i["type"].slice(0,1).capitalize + i["type"].slice(1..-1),
+        description: i["description"],
+        url: i["repo_url"],
+      }
+    end
+
+    puts "myfcn(\n" + JSON.pretty_generate(result) + "\n)"
+  end
+
+  desc "generate pull request for plugin_metadata.json"
   task :pull_request do
     Pluginsync::Plugins.pull_request
   end
