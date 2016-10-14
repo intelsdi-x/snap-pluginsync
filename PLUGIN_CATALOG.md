@@ -27,11 +27,11 @@ metadata = Pluginsync::Plugins.metadata
 
 There will always be more plugins we wish we had. To make sure others can contribute to our community goals, we keep a wish list of what people would like to see. If you see one here and want to start on it please let us know by commenting on the corresponding issue!
 
-| Issue | Description |
-|-------|-------------|
+| Issue | Type | Description |
+|-------|------|-------------|
 <%-
 wishlist = Pluginsync::Plugins.wishlist
 wishlist.each do |i|
 -%>
-| [#<%= i["number"] %>](<%= i["url"] %>) | <%= i["description"] %> |
+| [#<%= i["number"] %>](<%= i["url"] %>) | <%= i["type"] %> | <%= i["description"] %> |
 <%- end -%>

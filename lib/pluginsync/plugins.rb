@@ -40,13 +40,16 @@ module Pluginsync
 
       snap_issues = @github.issues 'intelsdi-x/snap'
 
-      wishlist = snap_issues.find_all{|issue| issue.labels.find{|label| label.name=='plugin-wishlist'}}
+      wishlist = snap_issues.find_all{|issue| issue.labels.find{|label| label.name =~ /^plugin-wishlist/}}
       wishlist.each do |issue|
+        wish_label = issue.labels.find{|l| l.name =~ /^plugin-wishlist/}
+        type = wish_label['name'].split('/').last
         data << {
           "number" => issue.number,
           "url" => "https://github.com/intelsdi-x/snap/issues/#{issue.number}",
           "description" => issue.title,
           "body" => issue.body,
+          "type" => type,
         }
       end
       data
