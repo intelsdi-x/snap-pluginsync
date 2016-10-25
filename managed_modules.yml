@@ -1,5 +1,6 @@
 ---
 - snap-plugin-collector-apache
+- snap-plugin-collector-cassandra
 - snap-plugin-collector-ceph
 - snap-plugin-collector-cinder
 - snap-plugin-collector-cpu
