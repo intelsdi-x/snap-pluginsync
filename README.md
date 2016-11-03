@@ -89,7 +89,6 @@ NOTE: an alternative option is to install and use the [hub cli tool](https://git
 Custom settings are maintained in each repo's .sync.yml file:
 
 ```
----
 :global:
   build:
     matrix:
@@ -127,7 +126,6 @@ README.md:
 Under the global settings, specify an array of build matrix using [GOOS and GOARCH](https://golang.org/doc/install/source#environment). This will generate the appropriate build script and travis config.
 
 ```
----
 :global:
   build:
     matrix:
@@ -184,6 +182,7 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
   install:
     - 'sudo apt-get install facter'
 ```
+
 * env: global environment values and test matrix, i.e. small/medium/large (NOTE: build is always included)
 ```
 .travis.yml:
@@ -194,6 +193,15 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
       - TEST_TYPE=small
       - TEST_TYPE=medium
       - TEST_TYPE=large
+```
+
+* matrix.exclude: exclude specific environment combinations from the test matrix:
+```
+.travix.yml:
+  matrix:
+    exclude:
+      - go: 1.6.3
+        env: SNAP_VERSION=latest SNAP_OS=alpine TEST_TYPE=large
 ```
 
 * deploy: deployment github/s3 token (encrypted via travis cli):
