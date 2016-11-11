@@ -43,6 +43,9 @@ env:
 <%- end -%>
 matrix:
   exclude:
+<%- if settings.matrix.exclude? -%>
+<%= pad_yaml(settings.matrix.exclude, 2) %>
+<%- end -%>
   - go: <%= settings.go.first %>
     env: TEST_TYPE=build
 before_install:
