@@ -22,6 +22,7 @@
 - snap-plugin-collector-load
 - snap-plugin-collector-meminfo
 - snap-plugin-collector-mesos
+- snap-plugin-collector-mongodb
 - snap-plugin-collector-mysql
 - snap-plugin-collector-neutron
 - snap-plugin-collector-nfsclient
@@ -39,9 +40,11 @@
 - snap-plugin-collector-smart
 - snap-plugin-collector-swap
 - snap-plugin-collector-users
+- snap-plugin-processor-anomalydetection
 - snap-plugin-processor-movingaverage
 - snap-plugin-processor-statistics
 - snap-plugin-processor-tag
+- snap-plugin-publisher-cassandra
 - snap-plugin-publisher-file
 - snap-plugin-publisher-graphite
 - snap-plugin-publisher-hana
