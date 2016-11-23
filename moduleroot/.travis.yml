@@ -43,7 +43,7 @@ env:
 <%- end -%>
 matrix:
   exclude:
-<%- if settings.matrix.exclude? -%>
+<%- if settings.matrix? and settings.matrix.exclude? -%>
 <%= pad_yaml(settings.matrix.exclude, 2) %>
 <%- end -%>
   - go: <%= settings.go.first %>
