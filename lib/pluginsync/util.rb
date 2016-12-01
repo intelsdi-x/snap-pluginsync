@@ -116,12 +116,12 @@ module Pluginsync
         'ceph': 'CEPH',
         'cpu': 'CPU',
         'dbi': 'DBI',
-        'heka': 'HEKA',
         'hana': 'HANA',
         'haproxy': 'HAproxy',
         'iostat': 'IOstat',
         'influxdb': 'InfluxDB',
         'jmx': 'Java JMX',
+        'mongodb': 'MongoDB',
         'mysql': 'MySQL',
         'nfs-client': 'NFS Client',
         'opentsdb': 'OpenTSDB',
@@ -130,6 +130,7 @@ module Pluginsync
         'pcm': 'PCM',
         'psutil': 'PSUtil',
         'rabbitmq': 'RabbitMQ',
+        'snmp': 'SNMP',
       }[word.to_sym] || word.slice(0,1).capitalize + word.slice(1..-1)
     end
 

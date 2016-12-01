@@ -55,28 +55,62 @@ module Pluginsync
       data
     end
 
-    def self.pull_request
-      catalog_repo = @config.plugin_catalog_md["repo"]
-      catalog_path = @config.plugin_catalog_md["path"]
+    def self.githubio_json
+      result = metadata.collect do |i|
+        {
+          name: i["name"],
+          type: i["type"].slice(0,1).capitalize + i["type"].slice(1..-1),
+          description: i["description"],
+          url: i["repo_url"],
+        }
+      end
 
-      fork_name = @config.plugin_catalog_md["fork"] || raise("Please configure plugin_catalog.md['fork'] in configuration.")
+      "myfcn(\n" + JSON.pretty_generate(result) + "\n)"
+    end
 
-      origin_repo = Pluginsync::Github::Repo.new catalog_repo
-      fork_repo = Pluginsync::Github::Repo.new fork_name
+    def self.pull_request(repo, repo_fork, branch, feature_branch, path, content, msg)
+      source = Pluginsync::Github::Repo.new repo
+      remote = Pluginsync::Github::Repo.new repo_fork
 
-      fork_repo.sync_branch(@config.branch)
+      remote.sync_branch(feature_branch, :branch => branch)
 
-      current_catalog = origin_repo.content catalog_path
+      current = source.content(path)
 
-      if catalog != current_catalog
-        @log.info "Updating plugins_catalog.md in #{fork_name} branch #{@config.branch}"
-        fork_repo.update_content(catalog_path, catalog, :branch => @config.branch)
+      if current != content
+        @log.info "Updating #{path} in #{repo_fork} branch #{feature_branch}"
 
-        pr = fork_repo.create_pull_request(@config.branch, "Updating plugins_catalog.md by pluginsync. [ci skip]")
+        remote.update_content(path, content, :branch => branch)
+        pr = remote.create_pull_request(branch, feature_branch, msg)
         @log.info "Creating pull request: #{pr.html_url}"
       else
-        puts "No new updates to plugin_catalog.md."
+        @log.info "No new updates to #{path}"
       end
+    end
+
+    def self.catalog_pr
+      content = catalog
+      pull_request(
+        @config.plugin_catalog_md['repo'],
+        @config.plugin_catalog_md['fork'],
+        "master",
+        @config.plugin_catalog_md['branch'],
+        @config.plugin_catalog_md['path'],
+        content,
+        "Updating plugins_catalog.md from plugins.yml"
+      )
+    end
+
+    def self.githubio_pr
+      content = githubio_json
+      pull_request(
+        @config.plugin_list_js['repo'],
+        @config.plugin_list_js['fork'],
+        @config.plugin_list_js['branch'],
+        @config.plugin_list_js['branch'],
+        @config.plugin_list_js['path'],
+        content,
+        "Updating parsed plugin list from plugins.yml"
+      )
     end
   end
 end

@@ -6,7 +6,6 @@ module Pluginsync
     INTEL_ORG = Pluginsync.config.org
 
     Octokit.auto_paginate = true
-    @@client = Octokit::Client.new(:netrc => true) if File.exists? File.join(ENV["HOME"], ".netrc")
 
     begin
       require 'faraday-http-cache'
@@ -20,7 +19,8 @@ module Pluginsync
     end
 
     def self.client
-      @@client || Octokit
+      raise(Exception, "missing $HOME/.netrc configuration") unless File.exists? File.join(ENV["HOME"], ".netrc")
+      @@client ||= Octokit::Client.new(:netrc => true)
     end
 
     def self.issues name
@@ -119,8 +119,8 @@ module Pluginsync
         @gh.update_ref(@name, ref, new_commit) if branch
       end
 
-      def create_pull_request(branch, message)
-        @gh.create_pull_request(upstream, "master", "#{@repo.owner.login}:#{branch}", message)
+      def create_pull_request(source="master", branch, message)
+        @gh.create_pull_request(upstream, source, "#{@repo.owner.login}:#{branch}", message)
       end
 
       def yml_content(path, default={})
@@ -178,7 +178,7 @@ module Pluginsync
 
         metadata = yml_content('metadata.yml')
 
-        if @owner == Pluginsync::Github::INTEL_ORG
+        if (@owner == Pluginsync::Github::INTEL_ORG) and (plugin_name != 'Mesos')
           metadata["download"] = {
             "s3_latest"       => s3_url('latest'),
             "s3_latest_build" => s3_url('latest_build'),
