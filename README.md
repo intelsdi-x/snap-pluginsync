@@ -63,7 +63,7 @@ Please add the following to your .travis.yml file:
   secure: "REE..."
 ```
 
-NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info.
+NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info. When migrating a repo from private to public repo, the keys need to be re-encrypted with the `--org` flag.
 
 Generate plugin documentation:
 
