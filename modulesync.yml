@@ -5,7 +5,13 @@ branch: pluginsync
 message: "Updates to repository from pluginsync utility"
 plugins.yml:
   repo: intelsdi-x/snap
+  branch: master
   path: docs/plugins.yml
 plugin_catalog.md:
   repo: intelsdi-x/snap
+  branch: master
   path: docs/PLUGIN_CATALOG.md
+plugin_list.js:
+  repo: intelsdi-x/snap
+  branch: gh-pages
+  path: assets/catalog/parsed_plugin_list.js

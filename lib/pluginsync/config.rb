@@ -1,6 +1,6 @@
 module Pluginsync
   class Config
-    attr_reader :plugins_yml, :plugin_catalog_md, :org, :path, :branch, :log_level
+    attr_reader :plugins_yml, :plugin_catalog_md, :plugin_list_js, :org, :path, :branch, :log_level
 
     def initialize
       @path = File.expand_path(File.join(File.dirname(__FILE__), "../.."))
@@ -15,6 +15,7 @@ module Pluginsync
 
       @plugins_yml = settings["plugins.yml"]
       @plugin_catalog_md = settings["plugin_catalog.md"]
+      @plugin_list_js = settings["plugin_list.js"]
       @org = settings["namespace"]
       @branch = settings["branch"]
       @log_level = settings["log_level"] || Logger::INFO

@@ -65,6 +65,41 @@ Please add the following to your .travis.yml file:
 
 NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info.
 
+Generate plugin documentation:
+
+1. Generate [github api token](https://github.com/settings/tokens) and populate [`${HOME}/.netrc` config](https://github.com/octokit/octokit.rb#using-a-netrc-file)
+
+    ```
+    machine api.github.com
+      login <username>
+      password <github_api_token>
+    ```
+    NOTE: You only need to grant public repo read permission for the API token.
+
+2. Fork [Snap](https://github.com/intelsdi-x/snap) repo on github and add your repo to [modulesync.yml](./modulesync.yml) in the pluginsync repo:
+
+    ```
+    plugin_catalog.md:
+      fork: username/snap
+    plugin_list.js:
+      fork: username/snap
+    ```
+
+3. Review new catalog/wishlist/github_io (optional). The output of the catalog and wishlist is combined into the PLUGIN_CATALOG.md file in the pull request.
+
+    ```
+    $ bundle exec rake plugin:catalog
+    $ bundle exec rake plugin:wishlist
+    $ bundle exec rake plugin:github_io
+    ```
+
+4. Create the pull-request against the Snap repo:
+
+    ```
+    $ bundle exec rake pr:catalog
+    $ bundle exec rake pr:github_io
+    ```
+
 ### New Plugins
 
 To run pluginsync against a new plugin:

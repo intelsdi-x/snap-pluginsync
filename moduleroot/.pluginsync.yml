@@ -11,8 +11,11 @@ end
 path = File.expand_path(Pathname.new(__FILE__).parent)
 managed_files = Find.find("#{path}/moduleroot/")
 managed_files = managed_files.collect{|line| line.sub("#{path}/moduleroot/",'')}.reject{|path| path==""}
+
+sync_yml = YAML.load_file("modules/#{@configs[:puppet_module]}/.sync.yml") rescue {}
+managed_files = managed_files.reject{|f| sync_yml.include? f and sync_yml[f]["unmanaged"] }
 -%>
 # File managed by pluginsync
-pluginsync_config: '0.1.8'
+pluginsync_config: '0.1.9'
 managed_files:
 <%= pad_yaml(managed_files) %>

@@ -33,22 +33,20 @@ namespace :plugin do
 
   desc "generate plugin json for github.io page"
   task :github_io do
-    data = Pluginsync::Plugins.metadata
-    result = data.collect do |i|
-      {
-        name: i["name"],
-        type: i["type"].slice(0,1).capitalize + i["type"].slice(1..-1),
-        description: i["description"],
-        url: i["repo_url"],
-      }
-    end
-
-    puts "myfcn(\n" + JSON.pretty_generate(result) + "\n)"
+    puts Pluginsync::Plugins.githubio_json
   end
 
-  desc "generate pull request for plugin_metadata.json"
-  task :pull_request do
-    Pluginsync::Plugins.pull_request
+end
+
+namespace :pr do
+  desc "generate pull request for PLUGIN_CATALOG.md"
+  task :catalog do
+    Pluginsync::Plugins.catalog_pr
+  end
+
+  desc "generate pull request for plugin_metadata.json in github.io"
+  task :github_io do
+    Pluginsync::Plugins.githubio_pr
   end
 end
 
