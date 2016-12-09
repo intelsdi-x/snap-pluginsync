@@ -19,7 +19,7 @@ metadata = Pluginsync::Plugins.metadata
 | Name | Maintainer | Description | CI | Download |
 |------|------------|-------------|----|----------|
 <%-
-  metadata.find_all{|p| p['type'] == type }.sort_by{|p| p['name']}.each do |p|
+  metadata.find_all{|p| p['type'] == type }.sort_by{|p| p['name'].downcase}.each do |p|
     maintainer = "[#{Pluginsync::Util.org_capitalize(p["maintainer"])}](#{p['maintainer_url']})"
     downloads = []
     downloads += ["[release](#{p['github_release']})"] if p.include? "github_release"

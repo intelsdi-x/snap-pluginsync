@@ -93,8 +93,8 @@ module Pluginsync
       def update_content(path, content, opt={})
         branch = opt[:branch] || "master"
 
-        raise(Argument::Error, "This tool cannot directly commit to #{INTEL_ORG} repos") if @name =~ /^#{INTEL_ORG}/
-        raise(Argument::Error, "This tool cannot directly commit to master branch") if branch == 'master'
+        raise(ArgumentError, "This tool cannot directly commit to #{INTEL_ORG} repos") if @name =~ /^#{INTEL_ORG}/
+        raise(ArgumentError, "This tool cannot directly commit to master branch") if branch == 'master'
 
         message = "update #{path} by pluginsync tool"
         content = Base64.encode64 content

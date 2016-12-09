@@ -79,7 +79,7 @@ module Pluginsync
       if current != content
         @log.info "Updating #{path} in #{repo_fork} branch #{feature_branch}"
 
-        remote.update_content(path, content, :branch => branch)
+        remote.update_content(path, content, :branch => feature_branch)
         pr = remote.create_pull_request(branch, feature_branch, msg)
         @log.info "Creating pull request: #{pr.html_url}"
       else
@@ -92,8 +92,8 @@ module Pluginsync
       pull_request(
         @config.plugin_catalog_md['repo'],
         @config.plugin_catalog_md['fork'],
-        "master",
         @config.plugin_catalog_md['branch'],
+        @config.plugin_catalog_md['feature_branch'],
         @config.plugin_catalog_md['path'],
         content,
         "Updating plugins_catalog.md from plugins.yml"
@@ -106,7 +106,7 @@ module Pluginsync
         @config.plugin_list_js['repo'],
         @config.plugin_list_js['fork'],
         @config.plugin_list_js['branch'],
-        @config.plugin_list_js['branch'],
+        @config.plugin_list_js['feature_branch'],
         @config.plugin_list_js['path'],
         content,
         "Updating parsed plugin list from plugins.yml"

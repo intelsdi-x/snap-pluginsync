@@ -5,7 +5,7 @@ settings = Hashie::Mash.new(@configs)
 settings.repo_name = settings.puppet_module
 
 def pad_yaml(data, num_spaces=0)
-  data = data.to_hash if data.is_a? ::Hashie::Mash
+  data = JSON.parse(data.to_json)
   value = data.to_yaml.split("\n")
   value[1..-1].collect{|line| ' ' * num_spaces + line}.join("\n")
 end
