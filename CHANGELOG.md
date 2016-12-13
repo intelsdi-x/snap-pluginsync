@@ -1,3 +1,12 @@
+## 2016-12-05 Release 0.1.9
+* add new Snap plugins
+* add documentation for plugin documentation generation
+* unmanaged files are no longer listed in .pluginsync.yml
+* fix maintainer link in CONTRIBUTING.md
+* update to snapteld for github issues
+* add go_coverage for medium tests
+* add matrix.exclude support for travis.yml
+
 ## 2016-10-25 Release 0.1.8
 
 * Update CONTRIBUTING.md - added 'Reporting Security Issues' section

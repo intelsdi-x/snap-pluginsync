@@ -10,8 +10,12 @@ plugins.yml:
 plugin_catalog.md:
   repo: intelsdi-x/snap
   branch: master
+  feature_branch: pluginsync
   path: docs/PLUGIN_CATALOG.md
+  fork: # username/snap
 plugin_list.js:
   repo: intelsdi-x/snap
   branch: gh-pages
+  feature_branch: pages # do not use gh-pages
   path: assets/catalog/parsed_plugin_list.js
+  fork: # username/snap
