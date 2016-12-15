@@ -137,11 +137,11 @@ module Pluginsync
     def self.html_list(list)
       case list
       when ::Array
-        if list.size > 0
+        if list.size > 1
           items = list.collect{|i| "<li>#{i}</li>"}.join('')
           "<ul>#{items}</ul>"
         else
-          ""
+          "#{list.first}"
         end
       else
         list

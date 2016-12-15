@@ -179,14 +179,14 @@ module Pluginsync
         metadata = yml_content('metadata.yml')
 
         if (@owner == Pluginsync::Github::INTEL_ORG) and (plugin_name != 'Mesos')
-          metadata["download"] = {
-            "s3_latest"       => s3_url('latest'),
-            "s3_latest_build" => s3_url('latest_build'),
-          }
+          metadata["badge"] ||= "[![Build Status](https://travis-ci.org/intelsdi-x/#{@repo.name}.svg?branch=master)](https://travis-ci.org/intelsdi-x/#{@repo.name})"
         end
 
         metadata["name"] = Pluginsync::Util.plugin_capitalize metadata["name"] if metadata["name"]
-        metadata["github_release"] = @repo.html_url + "/releases/latest" if @gh.releases(@name).size > 0
+        if @gh.releases(@name).size > 0
+          metadata["github_release"] = @repo.html_url + "/releases"
+          metadata["downloads"] = ["[release](#{metadata['github_release']})"]
+        end
         metadata["maintainer"] = "intelsdi-x" if metadata["maintainer"] == "core"
 
         result.merge(metadata)

@@ -21,11 +21,8 @@ metadata = Pluginsync::Plugins.metadata
 <%-
   metadata.find_all{|p| p['type'] == type }.sort_by{|p| p['name'].downcase}.each do |p|
     maintainer = "[#{Pluginsync::Util.org_capitalize(p["maintainer"])}](#{p['maintainer_url']})"
-    downloads = []
-    downloads += ["[release](#{p['github_release']})"] if p.include? "github_release"
-    downloads += p['download']['s3_latest'].collect{|h| "[#{h.keys.first}](#{h[h.keys.first]})" } if p['download'] and p['download']['s3_latest']
 -%>
-| [<%= p['name'] %>](<%= p['repo_url'] %>) | <%= maintainer %> | <%= p['description'] %> | <%= Pluginsync::Util.html_list(p['badge']) -%> | <%= Pluginsync::Util.html_list(downloads) %> |
+| [<%= p['name'] %>](<%= p['repo_url'] %>) | <%= maintainer %> | <%= p['description'] %> | <%= Pluginsync::Util.html_list(p['badge']) -%> | <%= Pluginsync::Util.html_list(p['downloads']) %> |
   <%- end -%>
 <%- end -%>
 
