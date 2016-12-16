@@ -40,6 +40,7 @@
 - snap-plugin-collector-snmp
 - snap-plugin-collector-smart
 - snap-plugin-collector-swap
+- snap-plugin-collector-use
 - snap-plugin-collector-users
 - snap-plugin-collector-yarn
 - snap-plugin-processor-anomalydetection
