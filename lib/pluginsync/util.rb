@@ -131,6 +131,7 @@ module Pluginsync
         'psutil': 'PSUtil',
         'rabbitmq': 'RabbitMQ',
         'snmp': 'SNMP',
+        'use': 'USE',
       }[word.to_sym] || word.slice(0,1).capitalize + word.slice(1..-1)
     end
 
