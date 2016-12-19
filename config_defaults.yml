@@ -7,8 +7,8 @@
         GOARCH: amd64
 .travis.yml:
   go:
-    - 1.6.x
-    - 1.7.x
+    - 1.6.4
+    - 1.7.4
   env:
     global:
     - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
