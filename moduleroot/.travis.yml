@@ -83,7 +83,7 @@ deploy:
   on:
     repo: intelsdi-x/<%= settings.repo_name %>
     branch: master
-    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION =~ <%= settings.release.travis_go_version %>
 - provider: s3
   access_key_id: <%= settings.deploy.access_key_id %>
   secret_access_key:
@@ -97,7 +97,7 @@ deploy:
   on:
     repo: intelsdi-x/<%= settings.repo_name %>
     tags: true
-    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION =~ <%= settings.release.travis_go_version %>
 <%- end -%>
 <%- if settings.deploy.api_key? && settings.build? && settings.build.matrix? -%>
 - provider: releases
@@ -112,6 +112,6 @@ deploy:
   on:
     repo: intelsdi-x/<%= settings.repo_name %>
     tags: true
-    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION = "<%= settings.go.last %>"
+    condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION =~ <%= settings.release.travis_go_version %>
 <%- end -%>
 <%- end -%>
