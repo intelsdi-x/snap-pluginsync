@@ -1,6 +1,24 @@
 # Snap Pluginsync Utility
 
-This repository contains common files synced across multiple snap plugin repos.
+This repository contains common files synced across multiple Snap plugin repos, and tools for managing Snap plugins.
+
+## Table of Contents
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Update Snap plugin repository](#update-snap-plugin-repository)
+    * [New Plugins](#new-plugins)
+    * [Private Plugins](#private-plugins)
+  * [Generate travis secret](#generate-travis-secret)
+  * [Update plugin metadata](#update-plugin-metadata)
+* [Pluginsync Configuration](#pluginsync-configuration)
+  * [Configuration Values](#configuration-values)
+    * [Plugin Build Matrix](#plugin-build-matrix)
+    * [\.travis\.yml](#travisyml)
+    * [scripts/build\.sh](#scriptsbuildsh)
+    * [scripts/deps\.sh](#scriptsdepssh)
+    * [contributing\.md](#contributingmd)
+  * [Special Files](#special-files)
+    * [\.pluginsync\.yml](#pluginsyncyml)
 
 ## Installation
 
@@ -42,30 +60,71 @@ For more info see:
 
 ## Usage
 
-Update all plugins (must use the noop option for now):
+The repository provides several Snap plugin maintenance tools:
+
+* repo plugin sync: update repos with the latest license, testing, and travis ci configs.
+* generate travis ci secret: create secret token for publishing binaries
+* catalog metadata: update github plugin_catalog and snap-telemetry.io page with latest github plugin metadata.
+
+### Update Snap plugin repository
+
+Global updates to all repositories are typically done when there are changes to settings or templates in this repository, such as go version 1.7.3 -> 1.7.4, or updates to the contributor readme file.
+
+To update all plugin repositories (must use the noop option for now):
 ```
 $ bundle exec msync update --noop
 $ cd modules/{plugin_name}
 ```
 
-Update one plugin and review changes:
+Individual plugins are updated when we add a new Snap plugin, or a plugin's `.sync.yml` configuration has been updated. For customization options review the [`.sync.yml` configuration options](#pluginsync-configuration).
+
+Update one plugin repository (typically when that plugin's `.sync.yml` config is updated) and review changes:
 ```
 $ bundle exec msync update -f {plugin_name} --noop
 $ cd modules/{plugin_name}
 ```
-NOTE: The plugin_name is the full repo name 'snap-plugin-collector-ethtool'.
+NOTE: The plugin_name is the full repo name, such as 'snap-plugin-collector-ethtool'.
+
+#### New Plugins
+
+To run pluginsync against a new plugin:
+
+* create a new repo on github (create the repo with a README or push an initial commit)
+* add new plugin repo name to the list of plugins in [managed_modules.yml](./managed_modules.yml)
+* run `msync update` command per usage above
+
+#### Private Plugins
+
+Currently, private repos are not listed in managed_modules.yml. To run pluginsync against a private repo, add the plugin repo name to managed_modules.yml but do not commit this change. In addition, please ensure you have configured ssh key or token based github access.
+
+See github documentation for more information:
+
+* [Generating and using a ssh key](https://help.github.com/articles/generating-an-ssh-key/)
+* [Generating access token for command line usage](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+
+NOTE: an alternative option is to install and use the [hub cli tool](https://github.com/github/hub) which provides a convenient way to generate and save github access token.
+
+### Generate travis secret
 
 Generate travis secrets for .travis.yml (replace $repo_name with github repo name):
 ```
-$ bundle exec travis encrypt secret_api_key -r 'intelsdi-x/${repo_name}'
+$ bundle exec travis encrypt ${secret_api_key} -r 'intelsdi-x/${repo_name}'
 Please add the following to your .travis.yml file:
 
   secure: "REE..."
 ```
 
+This is typically used to encrypt our s3 bucket access key so we can publish plugin binaries:
+
+```
+$ bundle exec travis encrypt S3_SECRET_ACCESS_KEY -r 'intelsdi-x/snap-plugin-publisher-file'
+```
+
 NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info. When migrating a repo from private to public repo, the keys need to be re-encrypted with the `--org` flag.
 
-Generate plugin documentation:
+### Update plugin metadata
+
+To update Snap's [plugin catalog readme](https://github.com/intelsdi-x/snap/blob/master/docs/PLUGIN_CATALOG.md) or snap-telemetry [github.io website](http://snap-telemetry.io/plugins.html):
 
 1. Generate [github api token](https://github.com/settings/tokens) and populate [`${HOME}/.netrc` config](https://github.com/octokit/octokit.rb#using-a-netrc-file)
 
@@ -74,7 +133,7 @@ Generate plugin documentation:
       login <username>
       password <github_api_token>
     ```
-    NOTE: You only need to grant public repo read permission for the API token.
+    NOTE: You only need to grant public repo read permission for the API token, and use the Github API token in the password field (not your github password).
 
 2. Fork [Snap](https://github.com/intelsdi-x/snap) repo on github and add your repo to [modulesync.yml](./modulesync.yml) in the pluginsync repo:
 
@@ -100,27 +159,14 @@ Generate plugin documentation:
     $ bundle exec rake pr:github_io
     ```
 
-### New Plugins
-
-To run pluginsync against a new plugin:
-
-* create a new repo on github (check initialize repo with a README)
-* add new plugin repo name to the list of plugins in managed_modules.yml
-* run `msync update` command per usage above
-
-### Private Plugins
-
-Currently, private repos are not listed in managed_modules.yml. To run pluginsync against a private repo, follow the steps in new plugins and ensure you have configured ssh key or token based github access.
-
-See github documentation for more information:
-
-* [Generating and using a ssh key](https://help.github.com/articles/generating-an-ssh-key/)
-* [Generating access token for command line usage](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
-
-NOTE: an alternative option is to install and use the [hub cli tool](https://github.com/github/hub) which provides a convenient way to generate and save github access token.
+    If there are any updates, a PR will be generated and it will go through normal review process. Otherwise the task will simply exit with no output.
+    ```
+    $ bundle exec rake pr:github_io
+    I, [2017-01-11T13:01:32.907683 #91253]  INFO -- : Updating assets/catalog/parsed_plugin_list.js in username/snap branch pages
+    I, [2017-01-11T13:01:38.154020 #91253]  INFO -- : Creating pull request: https://github.com/intelsdi-x/snap/pull/1468
+    ```
 
 ## Pluginsync Configuration
-
 Custom settings are maintained in each repo's .sync.yml file:
 
 ```
@@ -154,10 +200,9 @@ README.md:
   delete: true
 ```
 
-## Configuration Values
+### Configuration Values
 
-### Plugin Build Matrix
-
+#### Plugin Build Matrix
 Under the global settings, specify an array of build matrix using [GOOS and GOARCH](https://golang.org/doc/install/source#environment). This will generate the appropriate build script and travis config.
 
 ```
@@ -170,8 +215,7 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
         GOARCH: amd64
 ```
 
-### .travis.yml
-
+#### .travis.yml
 .travis.yml supports the following settings:
 
 * sudo: enable/disable [container/VM build environment](https://docs.travis-ci.com/user/ci-environment/#Virtualization-environments)
@@ -252,7 +296,7 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
 
 NOTE: Be aware, custom settings are not merged with defaults, instead they replace the default values.
 
-### scripts/build.sh
+#### scripts/build.sh
 build.sh supports the following settings:
 
 * cgo_enabled: enable/disable CGO for builds (default: 0)
@@ -261,8 +305,7 @@ scripts/build.sh:
   cgo_enabled: true
 ```
 
-### scripts/deps.sh
-
+#### scripts/deps.sh
 deps.sh supports the following settings:
 
 * packages: additional go package dependencies (please limit to test frameworks, software dependencies should be specified in godep or glide.yaml)
@@ -273,8 +316,7 @@ scripts/deps.sh:
     - github.com/stretchr/testify/mock
 ```
 
-### contributing.md
-
+#### contributing.md
 The contributing.md suports the following settings:
 * maintainers: core, community, github username.
 
@@ -284,10 +326,9 @@ Since this may affect additional files, it's recommended to specify the setting 
   maintainer: core
 ```
 
-## Special Files
+### Special Files
 
-### .pluginsync.yml
-
+#### .pluginsync.yml
 .pluginsync.yml will contain the pluginsync configuration version and a list of files managed by pluginsync:
 
 ```
