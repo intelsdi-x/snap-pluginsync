@@ -10,6 +10,13 @@ This repository contains common files synced across multiple Snap plugin repos, 
     * [Private Plugins](#private-plugins)
   * [Generate travis secret](#generate-travis-secret)
   * [Update plugin metadata](#update-plugin-metadata)
+  * [Large Tests](#large-tests)
+    * [File Layout](#file-layout)
+    * [Docker Compose](#docker-compose)
+    * [Example Tasks](#example-tasks)
+    * [Running Large Tests](#running-large-tests)
+    * [Travis CI](#travis-ci)
+    * [Serverspec](#serverspec)
 * [Pluginsync Configuration](#pluginsync-configuration)
   * [Configuration Values](#configuration-values)
     * [Plugin Build Matrix](#plugin-build-matrix)
@@ -165,6 +172,186 @@ To update Snap's [plugin catalog readme](https://github.com/intelsdi-x/snap/blob
     I, [2017-01-11T13:01:32.907683 #91253]  INFO -- : Updating assets/catalog/parsed_plugin_list.js in username/snap branch pages
     I, [2017-01-11T13:01:38.154020 #91253]  INFO -- : Creating pull request: https://github.com/intelsdi-x/snap/pull/1468
     ```
+
+### Large Tests
+
+Running large tests require the following software on your development systems:
+
+* docker
+* docker-compose
+
+The default large test performs the following actions:
+
+* use environment variable to populate and initialize containers in: `scripts/test/docker_compose.yml`
+* conditionally run `scripts/test/setup.rb` before any test (use this to create test database, test service etc)
+* download and run the appropriate version of Snap per `$SNAP_VERSION`
+* scan `examples/task/*.yml` for list of tasks and metrics
+* load Snap plugins, first from the local `build/linux/x86_64/*` directory, then try `build.snap-telemetry.io` s3 bucket
+* verify plugins are loaded successfully
+* attempt to create, verify, and stop every yaml task in the examples directory.
+* shutdown and cleanup containers
+
+If this is not the appropriate behavior, you can write custom large test as `{test_name}_spec.rb` in the `scripts/test` directory.
+
+#### File Layout
+
+Pluginsync adds several files to support large test framework. Files names surrounded by {} are not created by pluginsync. Please review the comments to see how each file affects the large tests framework.
+
+```
+├── build
+│   └── linux
+│       └── x86_64                         # plugins missing from this directory will be fetched from s3
+│           ├── {snap-plugin-plugin_name}  # make will build the current plugin for testing
+│           └── {snap-plugin-custom_name}  # custom plugins can be copied here to take precedence over s3 binaries
+├── examples
+│   └── tasks
+│       ├── {example.json}                 # json tasks are ignored and serve purely as examples
+│       └── {example.yml}                  # yaml tasks are loaded and verified in the test framework
+└── scripts
+    ├── large.sh
+    └── test
+        ├── {docker-compose.yml}           # to be supplied by the developer
+        ├── large_spec.rb                  # default large test, can be disabled by setting the file to `unmanaged`
+        ├── {custom_spec.rb}               # additional spec tests can be written to compliment the default large test
+        ├── {setup.rb}                     # optional setup executed before running large test
+        └── spec_helper.rb
+```
+
+#### Docker Compose
+
+A default `docker_compose.yml` file should be supplied by the developer and placed in `./scripts/test` directory. This will be used by the default large spec test. Additional docker compose config files can be supplied for complex test scenarios and they require their own custom_spec.rb test.
+
+Currently these environment variables are passed to the Snap container (we are investigating ways to pass additional/arbitrary ENV variable values):
+* OS: any os available in [snap-docker repo](https://github.com/intelsdi-x/snap-docker) (default: alpine)
+* SNAP_VERSION: any Snap version, or git sha1 that's available in the s3 bucket (default: latest)
+* PLUGIN_PATH: used by large test framework, this must be included in the Snap container
+
+Single container:
+```
+version: '2'
+services:
+   snap:                              # NOTE: do not change the snap container name
+    image: intelsdi/snap:${OS}_test
+    environment:
+      SNAP_VERSION: "${SNAP_VERSION}"
+    volumes:
+      - "${PLUGIN_PATH}:/plugin"
+```
+
+Multiple container:
+```
+version: '2'
+services:
+  snap:                                 # NOTE: do not change the snap container name
+    image: intelsdi/snap:alpine_test    # OS can be locked down to a specific version
+    environment:
+      SNAP_VERSION: "${SNAP_VERSION}"
+      INFLUXDB_HOST: "${INFLUXDB_HOST}" # Custom environment variables require updates to large.sh
+    volumes:
+      - "${PLUGIN_PATH}:/plugin"
+    links:
+      - influxdb
+  influxdb:
+    image: influxdb:1.0
+    expose:
+      - "8083"
+      - "8086"
+```
+
+#### Example Tasks
+
+The default `large_spec.rb` test will verify all yaml example tasks in the plugin's `examples/task` folder. The large test ignores json tasks, so they can be used as examples to demonstrate features that are not tested. There are no restrictions when you write custom tests, and here's some recommendations:
+
+* avoid using mock plugins whenever possible
+* when mock plugins are required, download the appropriate binary in the build directory (mock vs. mock2)
+* use a fixtures directory to simulate the content of the `/proc` directory instead of depending on the test system
+* use environment variables in task manifest instead of ipaddresses (such as `"${INFLUXDB_HOST}"`) and pass setting via `docker-compose.yml`
+
+#### Running Large Tests
+
+When the previous steps have been completed, you can verify the large tests works locally by executing:
+```
+$ make test-large
+```
+
+Custom environment variables can be supplied such as:
+```
+OS=trusty SNAP_VERSION=1.0.0 make test-large
+```
+
+To troubleshoot a failing large test, enable the debug flag:
+```
+DEBUG=true make test-large
+```
+
+When the test encounters any failures, it will be paused at a pry debug session. The test containers will remain running and available for further examination. When the problem has been identified, simply `exit` the debug session to resume testing, or use `exit-program` to quit immediately.
+
+#### Travis CI
+
+To enable large tests on Travis CI, please enable sudo, docker, and add the appropriate test matrix settings in `.sync.yml`:
+```
+.travis.yml:
+  sudo: true
+  services:
+    - docker
+  env:
+    global:
+      - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
+      - SNAP_PLUGIN_SOURCE=/home/travis/gopath/src/github.com/${TRAVIS_REPO_SLUG}
+    matrix:
+      - TEST_TYPE: small
+      - TEST_TYPE: medium
+      - SNAP_VERSION: latest
+        OS: xenial
+        TEST_TYPE: large
+      - SNAP_VERSION: latest_build
+        OS: centos7
+        TEST_TYPE: large
+  matrix:
+    exclude:
+      - go: 1.6.x
+        env: SNAP_VERSION=latest OS=xenial TEST_TYPE=large
+      - go: 1.6.x
+        env: SNAP_VERSION=latest_build OS=centos7 TEST_TYPE=large
+```
+
+#### Serverspec
+
+The large tests are written using [serverspec](http://serverspec.org/) as the system test framework. An example installing and testing `ping`:
+
+```
+set :docker_compose_container, :snap                       # required if you use the os["family"] detection functionality
+
+context "network is functional" do
+  if os["family"] == "ubuntu"
+    describe package("iputils-ping") do
+      it { should be_installed }
+    end
+  elsif os["family"] == "redhat"
+    describe package("iputils") do
+      it { should be_installed }
+    end
+  end
+
+  describe command('ping -c1 8.8.8.8') do
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should contain(/1 packets received/) }
+  end
+end
+```
+
+If you have more than one container specified in docker compose, tests can be executed in each container separately:
+```
+describe docker_compose('./docker_compose.yml') do
+  its_container(:snap) do
+    # these tests would only run in the snap container
+  end
+
+  its_container(:influxdb) do
+    # these tests would only run in the influxdb container
+  end
+end
+```
 
 ## Pluginsync Configuration
 Custom settings are maintained in each repo's .sync.yml file:
