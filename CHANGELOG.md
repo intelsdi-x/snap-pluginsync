@@ -1,3 +1,11 @@
+## 2017-1-12 Release 0.1.10
+* add large test framework to pluginsync
+* reduce number of tests by legacy
+* support golang 1.7.x/1.6.x version
+* list number of plugins in catalog
+* reformat plugins catalog format
+* documentation updates
+
 ## 2016-12-05 Release 0.1.9
 * add new Snap plugins
 * add documentation for plugin documentation generation
