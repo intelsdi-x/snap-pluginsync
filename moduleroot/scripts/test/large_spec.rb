@@ -4,7 +4,7 @@ require_relative './spec_helper'
 require 'specinfra/backend/docker_compose'
 
 compose_yml = File.expand_path(File.join(__FILE__, "../docker-compose.yml"))
-raise(Exception, "Missing docker-compose file: #{compose_yml}") unless File.exists? compose.yml
+raise(Exception, "Missing docker-compose file: #{compose_yml}") unless File.exists? compose_yml
 
 set :docker_compose_container, :snap
 

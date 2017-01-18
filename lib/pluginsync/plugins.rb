@@ -31,7 +31,7 @@ module Pluginsync
     end
 
     def self.catalog
-      template = File.read(File.join(@config.path, "PLUGIN_CATALOG.md"))
+      template = File.read(File.join(@config.path, "PLUGIN_CATALOG.md.erb"))
       @catalog ||= ERB.new(template, nil, '-').result
     end
 
