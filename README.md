@@ -10,6 +10,7 @@ This repository contains common files synced across multiple Snap plugin repos, 
     * [Private Plugins](#private-plugins)
   * [Generate travis secret](#generate-travis-secret)
   * [Update plugin metadata](#update-plugin-metadata)
+  * [Plugin Statistics](#plugin-statistics)
   * [Large Tests](#large-tests)
     * [File Layout](#file-layout)
     * [Docker Compose](#docker-compose)
@@ -171,6 +172,41 @@ To update Snap's [plugin catalog readme](https://github.com/intelsdi-x/snap/blob
     $ bundle exec rake pr:github_io
     I, [2017-01-11T13:01:32.907683 #91253]  INFO -- : Updating assets/catalog/parsed_plugin_list.js in username/snap branch pages
     I, [2017-01-11T13:01:38.154020 #91253]  INFO -- : Creating pull request: https://github.com/intelsdi-x/snap/pull/1468
+    ```
+
+### Plugin Statistics
+
+To obtain plugin download metrics:
+
+1. Generate [github api token](https://github.com/settings/tokens) and populate [`${HOME}/.netrc` config](https://github.com/octokit/octokit.rb#using-a-netrc-file)
+
+    ```
+    machine api.github.com
+      login <username>
+      password <github_api_token>
+    ```
+    NOTE: You only need to grant public repo read permission for the API token, and use the Github API token in the password field (not your github password).
+
+2. Run the `plugin:stats` rake task:
+
+    ```
+    $ bundle exec rake plugin:stats
+    ---
+    - intelsdi-x/snap-plugin-publisher-file:
+        clones:
+          count: 1187
+          uniques: 131
+        views:
+          count: 78
+          uniques: 30
+        '2':
+          snap-plugin-publisher-file_darwin_x86_64: 57
+          snap-plugin-publisher-file_linux_x86_64: 1869
+        v1.0.0:
+          snap-plugin-publisher-file_darwin: 0
+          snap-plugin-publisher-file_linux: 4
+        total: 1930
+    ...
     ```
 
 ### Large Tests

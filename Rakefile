@@ -36,6 +36,10 @@ namespace :plugin do
     puts Pluginsync::Plugins.githubio_json
   end
 
+  desc "generate plugin download metric from github"
+  task :stats do
+    puts Pluginsync::Plugins.stats.to_yaml
+  end
 end
 
 namespace :pr do
