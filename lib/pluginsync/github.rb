@@ -165,6 +165,39 @@ module Pluginsync
         end
       end
 
+      def metric
+        total = 0
+        metric = Hash.new{ |h, k| h[k]={} }
+
+        # NOTE: passing beta media type to avoid the following message:
+        # WARNING: The preview version of the Traffic API is not yet suitable for production use.
+        # You can avoid this message by supplying an appropriate media type in the 'Accept' request
+        # header.
+        clones = @gh.clones(@name, per: 'week', accept: 'application/vnd.github.beta+json')
+        metric['clones']['count'] = clones.count
+        metric['clones']['uniques'] = clones.uniques
+
+        views = @gh.views(@name, per: 'week', accept: 'application/vnd.github.beta+json')
+        metric['views']['count'] = views.count
+        metric['views']['uniques'] = views.uniques
+
+        @gh.releases(@name).each do |r|
+          assets = Hash.new
+          r.assets.each do |a|
+            total += a.download_count
+            assets[a.name] = a.download_count
+          end
+          metric[r.tag_name] = assets
+        end
+        metric['total'] = total
+
+        { @name => metric }
+      end
+
+      def owner
+        @owner ||= @repo.owner.login
+      end
+
       def metadata
         result = {
           "name" => plugin_name,

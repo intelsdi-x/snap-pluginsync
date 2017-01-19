@@ -112,5 +112,10 @@ module Pluginsync
         "Updating parsed plugin list from plugins.yml"
       )
     end
+
+    def self.stats
+      intel_repos = repos.reject{|r| r.owner != Pluginsync::Github::INTEL_ORG}
+      intel_repos.collect{|r| r.metric}
+    end
   end
 end
