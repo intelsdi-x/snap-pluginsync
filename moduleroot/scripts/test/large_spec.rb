@@ -20,7 +20,7 @@ describe docker_compose(compose_yml) do
         }
       end
 
-      if os[:family] != 'ubuntu'
+      if os[:family] == 'alpine'
         describe port(8181) do
           it { should be_listening }
         end
