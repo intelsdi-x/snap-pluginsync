@@ -24,6 +24,7 @@ set -o pipefail
 
 LOG_LEVEL="${LOG_LEVEL:-6}"
 NO_COLOR="${NO_COLOR:-}"
+NO_GO_TEST=${NO_GO_TEST:-'-not -path "./.*" -not -path "*/_*" -not -path "./Godeps/*" -not -path "./vendor/*"'}
 
 trap_exitcode() {
   exit $?
@@ -55,7 +56,7 @@ _warning () { [ "${LOG_LEVEL}" -ge 4 ] && echo "$(_fmt warning) ${*}" 1>&2 || tr
 _error ()   { [ "${LOG_LEVEL}" -ge 3 ] && echo "$(_fmt error) ${*}" 1>&2 || true; exit 1; }
 
 _test_dirs() {
-  local test_dirs=$(find . -type f -name '*.go' -not -path "./.*" -not -path "*/_*" -not -path "./Godeps/*" -not -path "./vendor/*" -print0 | xargs -0 -n1 dirname| sort -u)
+  local test_dirs=$(sh -c "find . -type f -name '*.go' ${NO_GO_TEST} -print0" | xargs -0 -n1 dirname | sort -u)
   _debug "go code directories ${test_dirs}"
   echo "${test_dirs}"
 }
@@ -69,9 +70,13 @@ _go_get() {
   type -p "${_util}" > /dev/null || go get "${_url}" && _debug "go get ${_util} ${_url}"
 }
 
+_gofmt() {
+  test -z "$(gofmt -l -d $(_test_dirs) | tee /dev/stderr)"
+}
+
 _goimports() {
   _go_get golang.org/x/tools/cmd/goimports
-  test -z "$(goimports -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") | tee /dev/stderr)"
+  test -z "$(goimports -l -d $(_test_dirs) | tee /dev/stderr)"
 }
 
 _golint() {

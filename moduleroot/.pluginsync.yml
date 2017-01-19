@@ -16,6 +16,6 @@ sync_yml = YAML.load_file("modules/#{@configs[:puppet_module]}/.sync.yml") rescu
 managed_files = managed_files.reject{|f| sync_yml.include? f and sync_yml[f]["unmanaged"] }
 -%>
 # File managed by pluginsync
-pluginsync_config: '0.1.11'
+pluginsync_config: '0.1.12'
 managed_files:
 <%= pad_yaml(managed_files) %>

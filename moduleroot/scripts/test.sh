@@ -35,12 +35,10 @@ __proj_dir="$(dirname "$__dir")"
 
 _debug "script directory ${__dir}"
 _debug "project directory ${__proj_dir}"
+_info "skipping go test in following directories: ${NO_GO_TEST}"
 
 [[ "$TEST_TYPE" =~ ^(small|medium|large|legacy|build)$ ]] || _error "invalid TEST_TYPE (value must be 'small', 'medium', 'large', 'legacy', or 'build' recieved:${TEST_TYPE}"
 
-_gofmt() {
-  test -z "$(gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") | tee /dev/stderr)"
-}
 
 test_unit() {
   # The script does automatic checking on a Go package and its sub-packages, including:
