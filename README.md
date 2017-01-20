@@ -298,6 +298,7 @@ services:
 
 The default `large_spec.rb` test will verify all yaml example tasks in the plugin's `examples/task` folder. The large test ignores json tasks, so they can be used as examples to demonstrate features that are not tested. There are no restrictions when you write custom tests, and here's some recommendations:
 
+* examples tasks _must_ set `max-failures: 1` because we only check if a task is in running state, higher max-failures values will mask failures since it takes multiple collect attempts to toggle the task to disabled state.
 * avoid using mock plugins whenever possible
 * when mock plugins are required, download the appropriate binary in the build directory (mock vs. mock2)
 * use a fixtures directory to simulate the content of the `/proc` directory instead of depending on the test system
