@@ -13,6 +13,7 @@
     global:
     - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
     - SNAP_PLUGIN_SOURCE=/home/travis/gopath/src/github.com/${TRAVIS_REPO_SLUG}
+    - GLIDE_HOME="${HOME}/.glide"
     matrix:
     - TEST_TYPE=small
   # This is the deploy.on.condition.$TRAVIS_GO_VERSION we use to build binaries. See:
