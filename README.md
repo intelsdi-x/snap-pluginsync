@@ -30,6 +30,42 @@ This repository contains common files synced across multiple Snap plugin repos, 
 
 ## Installation
 
+Container:
+
+* install docker
+* start the container via the command `./pluginsync.sh`
+* pluginsync commands can be executed without `bundle exec`
+
+```
+$ ./pluginsync.sh
+root@660c0d4c89d3:/plugins# rake -T
+rake help              # Show the list of Rake tasks (rake -T)
+rake notify:slack      # send a slack notification
+rake plugin:catalog    # generate plugin catalog
+rake plugin:github_io  # generate plugin json for github.io page
+rake plugin:metadata   # generate plugin metadata
+rake plugin:stats      # generate plugin download metric from github
+rake plugin:wishlist   # generate plugin wishlist
+rake pr:catalog        # generate pull request for PLUGIN_CATALOG.md
+rake pr:github_io      # generate pull request for plugin_metadata.jso...
+root@660c0d4c89d3:/plugins# travis settings
+Settings for intelsdi-x/snap-pluginsync:
+[-] builds_only_with_travis_yml    Only run builds with a .travis.yml
+[+] build_pushes                   Build pushes
+[+] build_pull_requests            Build pull requests
+  0 maximum_number_of_builds       Maximum number of concurrent builds
+root@660c0d4c89d3:/plugins# msync update -f snap-plugin-processor-statistics --noop
+Syncing snap-plugin-processor-statistics
+Cloning repository fresh
+Cloning from git@github.com:intelsdi-x/snap-plugin-processor-statistics.git
+Creating new branch pluginsync
+Using no-op. Files in snap-plugin-processor-statistics may be changed but will not be committed.
+Files changed:
+diff --git a/.pluginsync.yml b/.pluginsync.yml
+...
+root@660c0d4c89d3:/plugins# exit
+```
+
 MacOS:
 
 * install rbenv and ruby 2.3.1
