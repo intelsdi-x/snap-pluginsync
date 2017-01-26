@@ -25,6 +25,8 @@ _verify_docker
 SNAP_VERSION=${SNAP_VERSION:-"latest"}
 OS=${OS:-"alpine"}
 PLUGIN_PATH=${PLUGIN_PATH:-"${__proj_dir}"}
+DEMO=${DEMO:-"false"}
+TASK=${TASK:-""}
 
 if [[ ${DEBUG:-} == "true" ]]; then
   cmd="cd /plugin/scripts && rescue rspec ./test/*_spec.rb"
@@ -33,4 +35,4 @@ else
 fi
 
 _info "running large test"
-docker run -v /var/run/docker.sock:/var/run/docker.sock -v "${__proj_dir}":/plugin -e PLUGIN_PATH="${PLUGIN_PATH}" -e SNAP_VERSION="${SNAP_VERSION}" -e OS="${OS}" -ti intelsdi/serverspec:alpine /bin/sh -c "${cmd}"
+docker run -v /var/run/docker.sock:/var/run/docker.sock -v "${__proj_dir}":/plugin -e DEMO="${DEMO}" -e TASK="${TASK}" -e PLUGIN_PATH="${PLUGIN_PATH}" -e SNAP_VERSION="${SNAP_VERSION}" -e OS="${OS}" -ti intelsdi/serverspec:alpine /bin/sh -c "${cmd}"

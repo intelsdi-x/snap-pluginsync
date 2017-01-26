@@ -77,6 +77,8 @@ describe docker_compose(compose_yml) do
 
           describe "Metrics in running tasks" do
             it {
+              binding.pry if ENV["DEMO"] == "true"
+
               data = curl_json_api("http://127.0.0.1:8181/v1/tasks")
               task = data["body"]["ScheduledTasks"].find{|i| i['id'] == task_id}
               expect(task['id']).to eq task_id
