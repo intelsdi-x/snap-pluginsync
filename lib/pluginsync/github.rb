@@ -192,6 +192,9 @@ module Pluginsync
         metric['total'] = total
 
         { @name => metric }
+      rescue Octokit::Forbidden
+        puts "Require admin access to #{name} for repo metrics."
+        { @name => nil }
       end
 
       def owner

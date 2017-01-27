@@ -1,2 +1,4 @@
 Gemfile.lock
 modules
+.ruby-version
+.bundle
