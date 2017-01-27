@@ -6,6 +6,13 @@ require 'specinfra/backend/docker_compose'
 compose_yml = File.expand_path(File.join(__FILE__, "../docker-compose.yml"))
 raise(Exception, "Missing docker-compose file: #{compose_yml}") unless File.exists? compose_yml
 
+# NOTE: scan docker compose file and pull latest containers:
+images = File.readlines(compose_yml).select {|l| l =~ /^\s*image:/}
+images = images.collect{|l| l.split('image:').last.strip }.uniq
+images.each do |i|
+  puts `docker pull #{i}`
+end
+
 set :docker_compose_container, :snap
 
 describe docker_compose(compose_yml) do

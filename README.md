@@ -254,7 +254,8 @@ Running large tests require the following software on your development systems:
 
 The default large test performs the following actions:
 
-* use environment variable to populate and initialize containers in: `scripts/test/docker_compose.yml`
+* use environment variable to populate docker compose specification in: `scripts/test/docker_compose.yml`
+* download the latest containers via `docker pull` and run them
 * conditionally run `scripts/test/setup.rb` before any test (use this to create test database, test service etc)
 * download and run the appropriate version of Snap per `$SNAP_VERSION`
 * scan `examples/task/*.yml` for list of tasks and metrics
