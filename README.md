@@ -534,6 +534,19 @@ Under the global settings, specify an array of build matrix using [GOOS and GOAR
       - TEST_TYPE=large
 ```
 
+One special environment variable is `NO_GO_TEST`. By default we filter out the following directory from testing:
+* .* or \_* hidden directories
+* Godeps or vendor directories
+
+There may be reasons to exclude other directories or have custom exclusions, and it can be configured by specifying this environment variable:
+```
+.travis.yml:
+  env:
+    global:
+      - GO15VENDOREXPERIMENT=1
+      - NO_GO_TEST='-not -path "./.*" -not -path "*/_*" -not -path "./Godeps/*" -not -path "./vendor/*" -not -path "./custom_dir/*"'
+```
+
 * matrix.exclude: exclude specific environment combinations from the test matrix:
 ```
 .travix.yml:
