@@ -55,6 +55,12 @@ _notice ()  { [ "${LOG_LEVEL}" -ge 5 ] && echo "$(_fmt notice) ${*}" 1>&2 || tru
 _warning () { [ "${LOG_LEVEL}" -ge 4 ] && echo "$(_fmt warning) ${*}" 1>&2 || true; }
 _error ()   { [ "${LOG_LEVEL}" -ge 3 ] && echo "$(_fmt error) ${*}" 1>&2 || true; exit 1; }
 
+_test_files() {
+  local test_files=$(sh -c "find . -type f -name '*.go' ${NO_GO_TEST} -print")
+  _debug "go source files ${test_files}"
+  echo "${test_files}"
+}
+
 _test_dirs() {
   local test_dirs=$(sh -c "find . -type f -name '*.go' ${NO_GO_TEST} -print0" | xargs -0 -n1 dirname | sort -u)
   _debug "go code directories ${test_dirs}"
@@ -71,12 +77,12 @@ _go_get() {
 }
 
 _gofmt() {
-  test -z "$(gofmt -l -d $(_test_dirs) | tee /dev/stderr)"
+  test -z "$(gofmt -l -d $(_test_files) | tee /dev/stderr)"
 }
 
 _goimports() {
   _go_get golang.org/x/tools/cmd/goimports
-  test -z "$(goimports -l -d $(_test_dirs) | tee /dev/stderr)"
+  test -z "$(goimports -l -d $(_test_files) | tee /dev/stderr)"
 }
 
 _golint() {
