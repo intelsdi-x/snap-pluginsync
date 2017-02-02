@@ -352,12 +352,41 @@ Custom environment variables can be supplied such as:
 OS=trusty SNAP_VERSION=1.0.0 make test-large
 ```
 
+A subset of tasks can be selected for testing via the TASK environment variable:
+```
+TASK="psutil*.yml" make test-large
+```
+
 To troubleshoot a failing large test, enable the debug flag:
 ```
 DEBUG=true make test-large
 ```
 
-When the test encounters any failures, it will be paused at a pry debug session. The test containers will remain running and available for further examination. When the problem has been identified, simply `exit` the debug session to resume testing, or use `exit-program` to quit immediately.
+When the test encounters any failures in debug mode, it will be paused at a [pry session](http://pryrepl.org/). The test containers will remain running and available for further examination. When the problem has been identified, simply `exit` the debug session to resume testing, or use `exit-program` to quit immediately.
+
+To spin up the environment in demo mode and pause after loading the first task:
+```
+DEMO=true make test-large
+```
+
+A specific task can be selected for usage in demo mode:
+```
+DEMO=true TASK="psutil-file.yml" make test-large
+```
+
+When you are done checking out the containers, simply type `exit-program`.
+
+NOTE: some useful commands once the containers are running in debug or demo mode:
+* login to Snap container:
+    ```
+$ docker exec -it $(docker ps | sed -n 's/\(\)\s*intelsdi\/snap.*/\1/p') /bin/bash
+bash-4.3# snaptel --version
+snaptel version test-f2f7c09
+    ```
+* view Snap daemon log:
+    ```
+$ docker logs $(docker ps | sed -n 's/\(\)\s*intelsdi\/snap.*/\1/p')
+    ```
 
 #### Travis CI
 
