@@ -394,28 +394,36 @@ $ docker logs $(docker ps | sed -n 's/\(\)\s*intelsdi\/snap.*/\1/p')
 To enable large tests on Travis CI, please enable sudo, docker, and add the appropriate test matrix settings in `.sync.yml`:
 ```
 .travis.yml:
-  sudo: true
-  services:
+  sudo: true # large tests require travis.ci VMs instead of containers (enabled via sudo: true)
+  services:  # this ensures docker/docker-compose is installed on the travis agent
     - docker
   env:
-    global:
+    global:   # If you change the matrix, please preserve environment globals:
       - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
       - SNAP_PLUGIN_SOURCE=/home/travis/gopath/src/github.com/${TRAVIS_REPO_SLUG}
     matrix:
-      - TEST_TYPE: small
-      - TEST_TYPE: medium
-      - SNAP_VERSION: latest
-        OS: xenial
-        TEST_TYPE: large
-      - SNAP_VERSION: latest_build
-        OS: centos7
-        TEST_TYPE: large
+      - TEST_TYPE: small             # preserve existing small tests
+      - TEST_TYPE: medium            # preserve existing medium tests (make sure they exist)
+      # if SNAP_VERSION:latest and OS:alpine is sufficient simply add TEST_TYPE: large
+      - TEST_TYPE: large
+      # if multiple SNAP_VERSION, OS needs to be tested, provide an array of versions:
+      - SNAP_VERSION=latest OS=xenial TEST_TYPE=large
+      - SNAP_VERSION=latest_build OS=centos7 TEST_TYPE=large
   matrix:
+    # travis doesn't have an easy way to exclude large tests with a regex, so
+    # please list every large test to exclude it from running on go 1.6.x
     exclude:
+      - go: 1.6.x
+        env: TEST_TYPE=large
       - go: 1.6.x
         env: SNAP_VERSION=latest OS=xenial TEST_TYPE=large
       - go: 1.6.x
         env: SNAP_VERSION=latest_build OS=centos7 TEST_TYPE=large
+```
+
+NOTE: If you did not set `sudo: true` and enable docker services, in travis.ci large test will fail with the following error:
+```
+2017-02-06 23:00:35 UTC [    error] docker needs to be installed
 ```
 
 #### Serverspec
