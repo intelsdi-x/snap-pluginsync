@@ -68,7 +68,7 @@ root@660c0d4c89d3:/plugins# exit
 
 MacOS:
 
-* install rbenv and ruby 2.3.1
+* install [rbenv](https://github.com/rbenv/rbenv) and ruby 2.3.1
 ```
 $ brew install rbenv
 $ rbenv install 2.3.1
@@ -91,16 +91,12 @@ $ cd snap-pluginsync
 $ rbenv local 2.3.1
 ```
 
-* use bundler to install msync dependencies:
+* use [bundler](https://bundler.io/) to install msync dependencies:
 ```
 $ gem install bundler
 $ bundle config path .bundle
 $ bundle install
 ```
-
-For more info see:
-* [rbenv](https://github.com/rbenv/rbenv)
-* [bundler](https://bundler.io/)
 
 ## Usage
 
