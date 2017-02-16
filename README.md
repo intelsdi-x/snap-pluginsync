@@ -283,6 +283,7 @@ Pluginsync adds several files to support large test framework. Files names surro
         ├── large_spec.rb                  # default large test, can be disabled by setting the file to `unmanaged`
         ├── {custom_spec.rb}               # additional spec tests can be written to compliment the default large test
         ├── {setup.rb}                     # optional setup executed before running large test
+        ├── {verify.rb}                    # optional verify executed after running large test
         └── spec_helper.rb
 ```
 
@@ -394,7 +395,7 @@ To enable large tests on Travis CI, please enable sudo, docker, and add the appr
   services:  # this ensures docker/docker-compose is installed on the travis agent
     - docker
   env:
-    global:   # If you change the matrix, please preserve environment globals:
+    global:  # If you change the matrix, please preserve environment globals:
       - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
       - SNAP_PLUGIN_SOURCE=/home/travis/gopath/src/github.com/${TRAVIS_REPO_SLUG}
     matrix:

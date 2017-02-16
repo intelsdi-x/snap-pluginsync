@@ -16,6 +16,11 @@ end
 set :docker_compose_container, :snap
 
 describe docker_compose(compose_yml) do
+
+  # NOTE: If you need to wait for a service or create a database perform it in setup.rb
+  setup = File.expand_path(File.join(__FILE__, '../setup.rb'))
+  eval File.read setup if File.exists? setup
+
   its_container(:snap) do
     describe 'docker-compose.yml run' do
       TIMEOUT = 60
@@ -121,4 +126,8 @@ describe docker_compose(compose_yml) do
       end
     end
   end
+
+  # NOTE: If you need to perform additional checks such as database verification it be done at the end:
+  verify = File.expand_path(File.join(__FILE__, '../verify.rb'))
+  eval File.read verify if File.exists? verify
 end
