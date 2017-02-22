@@ -19,6 +19,7 @@
 - snap-plugin-collector-iostat
 - snap-plugin-collector-keystone
 - snap-plugin-collector-libvirt
+- snap-plugin-collector-logs
 - snap-plugin-collector-load
 - snap-plugin-collector-meminfo
 - snap-plugin-collector-mesos
@@ -44,10 +45,13 @@
 - snap-plugin-collector-users
 - snap-plugin-collector-yarn
 - snap-plugin-processor-anomalydetection
+- snap-plugin-processor-logs-openstack
+- snap-plugin-processor-logs-regexp
 - snap-plugin-processor-movingaverage
 - snap-plugin-processor-statistics
 - snap-plugin-processor-tag
 - snap-plugin-publisher-cassandra
+- snap-plugin-publisher-elasticsearch
 - snap-plugin-publisher-etcd
 - snap-plugin-publisher-file
 - snap-plugin-publisher-graphite
