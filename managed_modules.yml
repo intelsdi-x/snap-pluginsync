@@ -32,6 +32,7 @@
 - snap-plugin-collector-osv
 - snap-plugin-collector-pcm
 - snap-plugin-collector-perfevents
+- snap-plugin-collector-pciessd
 - snap-plugin-collector-processes
 - snap-plugin-collector-psutil
 - snap-plugin-collector-rabbitmq
@@ -56,6 +57,7 @@
 - snap-plugin-publisher-file
 - snap-plugin-publisher-graphite
 - snap-plugin-publisher-hana
+- snap-plugin-publisher-hawkular
 - snap-plugin-publisher-heapster
 - snap-plugin-publisher-heka
 - snap-plugin-publisher-influxdb
