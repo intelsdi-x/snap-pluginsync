@@ -23,6 +23,12 @@ namespace :plugin do
     puts Pluginsync::Plugins.catalog
   end
 
+  desc "generate plugin catalog diff"
+  task :diff do
+    puts "Collecting github repo info ..."
+    puts Pluginsync::Plugins.diff
+  end
+
   desc "generate plugin metadata"
   task :metadata do
     puts "Collecting plugin metadata ..."

@@ -117,5 +117,17 @@ module Pluginsync
       intel_repos = repos.reject{|r| r.owner != Pluginsync::Github::INTEL_ORG}
       intel_repos.collect{|r| r.metric}
     end
+
+    def self.diff
+      all_repo = @github.client.org_repos('intelsdi-x')
+      all_plugins = all_repo.find_all{|p| p.name =~ /snap-plugin-(collector|processor|publisher)/}.collect{|p| p.full_name}
+
+      puts "snap community plugins:"
+      puts plugins - all_plugins
+
+      puts
+      puts "intelsdi-x unpublished plugins:"
+      puts all_plugins - plugins
+    end
   end
 end
