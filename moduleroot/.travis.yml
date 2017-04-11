@@ -23,11 +23,11 @@ go:
 <%= pad_yaml(settings.go) %>
 <%- if settings.addons? -%>
 addons:
-<%= pad_yaml(settings.addons, 2) %>
+<%= pad_yaml(settings.addons) %>
 <%- end -%>
 <%- if settings.services? -%>
 services:
-<%= pad_yaml(settings.services, 2) %>
+<%= pad_yaml(settings.services) %>
 <%- end -%>
 <%- if settings.env? -%>
 env:
@@ -39,7 +39,7 @@ env:
 <%- if settings.env.matrix? -%>
 <%= pad_yaml(settings.env.matrix, 2) %>
 <%- end -%>
-  - TEST_TYPE=build
+  - TEST_TYPE: build
 <%- end -%>
 matrix:
   exclude:
@@ -50,12 +50,12 @@ matrix:
     env: TEST_TYPE=build
 before_install:
 <%- if settings.before_install? -%>
-<%= pad_yaml(settings.before_install, 0) %>
+<%= pad_yaml(settings.before_install) %>
 <%- end -%>
 - "[[ -d $SNAP_PLUGIN_SOURCE ]] || mkdir -p $ORG_PATH && ln -s $TRAVIS_BUILD_DIR $SNAP_PLUGIN_SOURCE"
 install:
 <%- if settings.install? -%>
-<%= pad_yaml(settings.install, 0) %>
+<%= pad_yaml(settings.install) %>
 <%- end -%>
 - cd $SNAP_PLUGIN_SOURCE
 - make deps
@@ -71,9 +71,8 @@ before_deploy:
 deploy:
 <%- if settings.deploy.access_key_id? && settings.deploy.secret_access_key -%>
 - provider: s3
-  access_key_id: <%= settings.deploy.access_key_id %>
-  secret_access_key:
-    secure: <%= settings.deploy.secret_access_key.secure %>
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: snap.ci.snap-telemetry.io
   region: us-west-2
   skip_cleanup: true
@@ -85,9 +84,8 @@ deploy:
     branch: master
     condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION =~ <%= settings.release.travis_go_version %>
 - provider: s3
-  access_key_id: <%= settings.deploy.access_key_id %>
-  secret_access_key:
-    secure: <%= settings.deploy.secret_access_key.secure %>
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: snap.ci.snap-telemetry.io
   region: us-west-2
   skip_cleanup: true
@@ -101,8 +99,7 @@ deploy:
 <%- end -%>
 <%- if settings.deploy.api_key? && settings.build? && settings.build.matrix? -%>
 - provider: releases
-  api_key:
-    secure: <%= settings.deploy.api_key.secure %>
+  api_key: $GITHUB_API_KEY
   file:
 <%- settings.build.matrix.each do |release| 
       release['GOARCH'] = 'x86_64' if release['GOARCH'] == 'amd64'-%>

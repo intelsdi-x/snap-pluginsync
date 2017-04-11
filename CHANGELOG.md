@@ -1,3 +1,23 @@
+## 2017-4-12 Release 0.1.14
+* Bump go version 1.8.x
+* Fix release regex bug
+* Use environment variable for secrets
+
+## 2017-2-1 Release 0.1.13
+* Fix gofmt and goimport to test against files
+* Add pluginsync container and usage.
+* Add ability to exclude directories from testing.
+* snap task check needs short delay.
+* Add GLIDE_HOME to fix .glide/cache issue
+* Add plugin statistics
+
+## 2017-1-17 Relase 0.1.12
+* Fix #53 Add build all and remove extra build opts
+* Fix large test and change template to erb
+
+## 2017-1-12 Release 0.1.11
+* Fix #45 add testing requirements.
+
 ## 2017-1-12 Release 0.1.10
 * add large test framework to pluginsync
 * reduce number of tests by legacy

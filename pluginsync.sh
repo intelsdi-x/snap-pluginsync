@@ -28,6 +28,7 @@ fi
 # https://github.com/docker/for-mac/issues/483
 socat TCP-LISTEN:"$PORT",reuseaddr,fork,bind=127.0.0.1 UNIX-CLIENT:"$SSH_AUTH_SOCK" &
 
+docker pull intelsdi/pluginsync
 docker run --net=host -v "${HOME}":/root -v "$(pwd)":/plugins -e SSH_AUTH_SOCK=/var/run/ssh_agent.sock  -it intelsdi/pluginsync /bin/bash -c "socat UNIX-LISTEN:/var/run/ssh_agent.sock,reuseaddr,fork TCP:192.168.65.1:${PORT} & cd /plugins && echo 'commands do not be prefixed with bundle exec, try: \"rake -T\" or \"travis\" or \"msync\"' && /bin/bash"
 
 exit 0
