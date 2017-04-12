@@ -7,8 +7,8 @@
         GOARCH: amd64
 .travis.yml:
   go:
-    - 1.6.x
     - 1.7.x
+    - 1.8.x
   env:
     global:
     - ORG_PATH=/home/travis/gopath/src/github.com/intelsdi-x
@@ -19,4 +19,4 @@
   # This is the deploy.on.condition.$TRAVIS_GO_VERSION we use to build binaries. See:
   # https://github.com/travis-ci/docs-travis-ci-com/pull/889
   release:
-    travis_go_version: '^1\.7\.[0-9]+$'
+    travis_go_version: '^1\.8(|\.[0-9]+)$'

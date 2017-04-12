@@ -103,7 +103,7 @@ $ bundle install
 The repository provides several Snap plugin maintenance tools:
 
 * repo plugin sync: update repos with the latest license, testing, and travis ci configs.
-* generate travis ci secret: create secret token for publishing binaries
+* update travis ci environment secret: update secret token for publishing binaries to s3 and github.
 * catalog metadata: update github plugin_catalog and snap-telemetry.io page with latest github plugin metadata.
 
 ### Update Snap plugin repository
@@ -144,23 +144,28 @@ See github documentation for more information:
 
 NOTE: an alternative option is to install and use the [hub cli tool](https://github.com/github/hub) which provides a convenient way to generate and save github access token.
 
-### Generate travis secret
+### Update travis secrets
 
-Generate travis secrets for .travis.yml (replace $repo_name with github repo name):
+We currently use the following three secret environment variables to deploy binary artifacts:
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* GITHUB_API_KEY
+
+List repository secret environment variables:
 ```
-$ bundle exec travis encrypt ${secret_api_key} -r 'intelsdi-x/${repo_name}'
-Please add the following to your .travis.yml file:
-
-  secure: "REE..."
+$ travis env list -r intelsdi-x/snap-plugin-publisher-influxdb
+# environment variables for intelsdi-x/snap-plugin-publisher-influxdb
+GITHUB_API_KEY=[secure]
+AWS_ACCESS_KEY_ID=[secure]
+AWS_SECRET_ACCESS_KEY=[secure]
 ```
 
-This is typically used to encrypt our s3 bucket access key so we can publish plugin binaries:
-
+Set repository environment secrets
 ```
-$ bundle exec travis encrypt S3_SECRET_ACCESS_KEY -r 'intelsdi-x/snap-plugin-publisher-file'
+$ travis env -r intelsdi-x/reponame set GITHUB_API_KEY ...
 ```
 
-NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info. When migrating a repo from private to public repo, the keys need to be re-encrypted with the `--org` flag.
+NOTE: travis secrets are encrypted per repo. see [travis documentation](https://docs.travis-ci.com/user/encryption-keys/) for more info. When migrating a repo from private to public repo, the keys may need to be re-encrypted with the `--org` flag.
 
 ### Update plugin metadata
 
