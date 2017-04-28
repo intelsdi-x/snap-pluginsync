@@ -69,7 +69,7 @@ notifications:
 before_deploy:
 - "./scripts/pre_deploy.sh"
 deploy:
-<%- if settings.deploy.access_key_id? && settings.deploy.secret_access_key -%>
+<%- if settings.deploy? && settings.deploy.s3 -%>
 - provider: s3
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -97,7 +97,7 @@ deploy:
     tags: true
     condition: $TEST_TYPE = "build" && $TRAVIS_GO_VERSION =~ <%= settings.release.travis_go_version %>
 <%- end -%>
-<%- if settings.deploy.api_key? && settings.build? && settings.build.matrix? -%>
+<%- if settings.deploy? && settings.deploy.github && settings.build? && settings.build.matrix? -%>
 - provider: releases
   api_key: $GITHUB_API_KEY
   file:

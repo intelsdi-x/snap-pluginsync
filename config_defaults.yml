@@ -20,3 +20,6 @@
   # https://github.com/travis-ci/docs-travis-ci-com/pull/889
   release:
     travis_go_version: '^1\.8(|\.[0-9]+)$'
+  deploy:
+    s3: true
+    github: true
