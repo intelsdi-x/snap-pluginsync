@@ -23,7 +23,7 @@ go:
 <%= pad_yaml(settings.go) %>
 <%- if settings.addons? -%>
 addons:
-<%= pad_yaml(settings.addons) %>
+<%= pad_yaml(settings.addons, 2) %>
 <%- end -%>
 <%- if settings.services? -%>
 services:
