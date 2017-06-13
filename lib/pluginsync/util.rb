@@ -139,8 +139,8 @@ module Pluginsync
       case list
       when ::Array
         if list.size > 1
-          items = list.collect{|i| "<li>#{i}</li>"}.join('')
-          "<ul>#{items}</ul>"
+          items = list.collect{|i| "#{i}"}.join(' ')
+          "#{items}"
         else
           "#{list.first}"
         end
