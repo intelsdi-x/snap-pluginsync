@@ -130,20 +130,15 @@ module Pluginsync
         'pcm': 'PCM',
         'psutil': 'PSUtil',
         'rabbitmq': 'RabbitMQ',
+        'rdt': 'RDT',
         'snmp': 'SNMP',
         'use': 'USE',
       }[word.to_sym] || word.slice(0,1).capitalize + word.slice(1..-1)
     end
 
     def self.html_list(list)
-      case list
-      when ::Array
-        if list.size > 1
-          items = list.collect{|i| "<li>#{i}</li>"}.join('')
-          "<ul>#{items}</ul>"
-        else
-          "#{list.first}"
-        end
+      if list.is_a? ::Array 
+        list.join(' ')
       else
         list
       end
