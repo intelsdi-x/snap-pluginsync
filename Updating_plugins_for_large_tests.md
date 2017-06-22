@@ -1,14 +1,14 @@
-#How to run Pluginsync for large tests
+# How to run Pluginsync for large tests
 The following steps are necessary for updating plugins to the new large test framework. 
 
-###In the snap-pluginsync repo:
+### In the snap-pluginsync repo:
 - Fork and clone repo of plugin you want to run large tests on
 - Fork repo and clone snap-pluginsync
 - Make sure ssh-agent is running and your GitHub ssh key is loaded by running `ssh-add -l` (it should list your key)
 - Run `$ ./pluginsync.sh`
   - If this errors make sure ssh keys are set up
   
-###In container:
+### In container:
 - run `$ msync update -f {plugin_name} —noop`
 - to exit container: `$ exit`
 - cd into `modules/{plugin_name}`
