@@ -12,7 +12,13 @@ module Pluginsync
     def self.repos
       @repos ||= Set.new plugins.collect do |p|
         begin
-          Pluginsync::Github::Repo.new p
+          name = p
+          supported = false
+          if p.class == Hash
+            name = p.keys[0]
+            supported = p[name]['supported']
+          end
+          Pluginsync::Github::Repo.new name, supported
         rescue ArgumentError => e
           @log.error e.message
           nil
