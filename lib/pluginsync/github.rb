@@ -36,8 +36,9 @@ module Pluginsync
 
       attr_reader :name
 
-      def initialize(name)
+      def initialize(name, supported=false)
         @name = name
+        @supported = supported
         @gh = Pluginsync::Github.client
         raise(ArgumentError, "#{name} is not a valid github repository (or your account does not have access to this private repo)") unless @gh.repository? name
         @repo = @gh.repo name
@@ -205,6 +206,7 @@ module Pluginsync
         result = {
           "name" => plugin_name,
           "type" =>  plugin_type,
+          "supported" => @supported,
           "description" => @repo.description || 'No description available.',
           "maintainer" => @owner,
           "maintainer_url" => @repo.owner.html_url,
