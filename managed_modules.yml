@@ -1,7 +1,9 @@
 ---
+- snap-plugin-collector-active-directory
 - snap-plugin-collector-apache
 - snap-plugin-collector-cassandra
 - snap-plugin-collector-ceph
+- snap-plugin-collector-cgroups
 - snap-plugin-collector-cinder
 - snap-plugin-collector-cpu
 - snap-plugin-collector-dbi
@@ -11,11 +13,13 @@
 - snap-plugin-collector-elasticsearch
 - snap-plugin-collector-etcd
 - snap-plugin-collector-ethtool
+- snap-plugin-collector-exec
 - snap-plugin-collector-facter
 - snap-plugin-collector-glance
 - snap-plugin-collector-haproxy
 - snap-plugin-collector-influxdb
 - snap-plugin-collector-influxdb-data
+- snap-plugin-collector-intel-dcm-platform
 - snap-plugin-collector-interface
 - snap-plugin-collector-iostat
 - snap-plugin-collector-keystone
@@ -34,6 +38,7 @@
 - snap-plugin-collector-osv
 - snap-plugin-collector-pcm
 - snap-plugin-collector-perfevents
+- snap-plugin-collector-perfmon
 - snap-plugin-collector-pciessd
 - snap-plugin-collector-processes
 - snap-plugin-collector-psutil
