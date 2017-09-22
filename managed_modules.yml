@@ -20,6 +20,7 @@
 - snap-plugin-collector-influxdb
 - snap-plugin-collector-influxdb-data
 - snap-plugin-collector-intel-dcm-platform
+- snap-plugin-collector-intel-nvdimm
 - snap-plugin-collector-interface
 - snap-plugin-collector-iostat
 - snap-plugin-collector-keystone
