@@ -32,6 +32,7 @@ detect_go_dep() {
   [[ -f "${__proj_dir}/Godeps/Godeps.json" ]] && _dep='godep'
   [[ -f "${__proj_dir}/glide.yaml" ]] && _dep='glide'
   [[ -f "${__proj_dir}/vendor/vendor.json" ]] && _dep='govendor'
+  [[ -f "${__proj_dir}/Gopkg.toml" ]] && _dep='dep'
   _info "golang dependency tool: ${_dep}"
   echo "${_dep}"
 }
@@ -49,6 +50,9 @@ install_go_dep() {
     govendor)
       _go_get github.com/kardianos/govendor
       ;;
+    dep)
+      _go_get github.com/golang/dep/cmd/dep
+      ;;
   esac
 }
 
@@ -64,6 +68,9 @@ restore_go_dep() {
       ;;
     govendor)
       (cd "${__proj_dir}" && govendor sync)
+      ;;
+    dep)
+      (cd "${__proj_dir}" && dep ensure -v)
       ;;
   esac
 }
